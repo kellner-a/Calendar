@@ -27,12 +27,6 @@ public interface IDate {
    */
   public int getDay();
 
-  /**
-   * Returns the day of the week.
-   *
-   * @return Day: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-   */
-  public Day getDayofWeek();
 
   /**
    * Returns a new Date x days after this current date. Given 5 when this current date is

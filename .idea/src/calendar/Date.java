@@ -9,25 +9,23 @@ public class Date implements IDate {
     private int year;
     private int month;
     private int day;
-    private Day dayOfWeek;
 
     public Date(String dateString) {
+      String[] strings = dateString.split("-");
+      this.year = Integer.valueOf(strings[0]);
+      this.month = Integer.valueOf(strings[1]);
+      this.day = Integer.valueOf(strings[2]);
 
-//      this.year = year;
-//      this.month = month;
-//      this.day = day;
-//
-//
-//      // use formula to determine dayOfWeek based on the date
-//      dayOfWeek =
+      boolean valid = verify();
+      if (!valid) {
+        throw new IllegalArgumentException("Invalid date");
+      }
     }
 
-    private void validDate() throws IllegalArgumentException {
-      if (year < 0) {
-        throw new IllegalArgumentException("Year cannot be negative");
-      } if (month < 1 || month > 12) {
-        throw new IllegalArgumentException("Month must be between 1 and 12");
-      } else if ()
+    private Date(int year, int month, int day) {
+      this.year = year;
+      this.month = month;
+      this.day = day;
     }
 
     @Override
@@ -46,7 +44,78 @@ public class Date implements IDate {
     }
 
     @Override
+    public IDate getNextDate(int days) {
+      int nextday = this.day;
+      int nextmonth = this.month;
+      int nextyear = this.year;
+      nextday += days;
+      while (days > 0) {
+        if (nextmonth == 2 && this.leap() && nextday > 29) {
+          nextday -= 29;
+          nextmonth++;
+        } else if (nextmonth == 2 && !this.leap() && nextday > 28) {
+          nextday -= 28;
+          nextmonth++;
+        } else if ((nextmonth == 4 || nextmonth == 6 || nextmonth == 9
+                || nextmonth == 11) && nextday > 30) {
+          nextday -= 30;
+          nextmonth++;
+        } else if (nextday > 31) {
+          nextday -= 31;
+          nextmonth++;
+        } else {
+          days = 0;
+        }
+        if (nextmonth == 13) {
+          nextyear++;
+          nextmonth = 1;
+        }
+      }
+      return new Date(nextyear, nextmonth, nextday);
+    }
+
+    @Override
     public String toString() {
-      return ""; // implement!
+      String y = Integer.toString(this.year);
+      String m = Integer.toString(this.month);
+      String d = Integer.toString(this.day);
+      while (y.length() < 4) {
+        y = "0" + y;
+      }
+      if (m.length() < 2) {
+        m = "0" + m;
+      }
+      if (d.length() < 2) {
+        d = "0" + d;
+      }
+      return y + "-" + m + "-" + d;
+    }
+
+
+    // returns true if date is valid
+    private boolean verify() {
+      boolean bool = true;
+      if (month > 12 || month < 1 || day < 1 || year < 0) {
+        bool = false;
+      }
+      if ((month == 4 || month == 6 || month == 9 || month == 11) && day >= 31) {
+        bool = false;
+      }
+      if (month == 2 && day >= 29) {
+        bool = false;
+        if (this.leap() && day == 29) {
+          bool = true;
+        }
+      }
+      if (day > 31) {
+        bool = false;
+      }
+      return bool;
+    }
+
+    // returns true if the year is a leap year
+    private boolean leap() {
+      return this.year % 4 == 0 && (this.year % 100 != 0
+              || (this.year % 400 == 0 && this.year % 100 == 0));
     }
 }

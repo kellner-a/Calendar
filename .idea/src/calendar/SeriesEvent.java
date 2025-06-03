@@ -12,6 +12,10 @@ public class SeriesEvent extends AbstractEvent {
 
   private ArrayList<Date> recurringDates;
 
+  public SeriesEvent(String subject, String startDateTTime, String endDateTTIme, ...) {
+    super(subject, startDateTTime, endDateTTIme);
+  }
+
   public SeriesEvent(String subject, boolean status, Date start, Date end, int num, Day[] day) {
     super(subject, start, status);
     // create arraylist of days from inputted

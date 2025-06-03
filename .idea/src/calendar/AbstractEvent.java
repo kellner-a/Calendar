@@ -6,25 +6,51 @@ package calendar;
  * start. Default status is public. If no start or end time is inputted, they default to an 8 am
  * start time and a 5 pm end time, also specified as an all day event.
  */
-public class AbstractEvent implements IEvent {
+public abstract class AbstractEvent implements IEvent {
 
-  protected Date startDateString;
-  protected Date endDateString;
+  protected Date startDate;
+  protected Date endDate;
+  protected int[] times; //array of start/end hours and minutes
+  // {startHour, startMinute, endHour, endMinute}
   protected String location;
   protected String subject;
   protected String description;
   protected boolean status; // public or private
 
-  public AbstractEvent(String subject, String startDateString) {
-    String[] dateString = startDateString.split("T");
-    this.startDateString = new Date(dateString[0]);
-    if (dateString.length > 1) {
-      this.endDateString = new Date(dateString[1]);
-    }
+
+  /**
+   * Constructs an all day event with a subject and a start date.
+   * @param subject subject of the event
+   * @param startDateTTime the start date and start time as a string
+   */
+  public AbstractEvent(String subject, String startDateTTime) {
+    this.subject = subject;
+    String[] startString = startDateTTime.split("T");
+    this.startDate = new Date(startString[0]); // makes a new date w the start time
+    this.times = new int[] {8, 0 , 17, 0};
   }
 
-  public AbstractEvent(String subject, String startDateString, String endDateString) {
+  public AbstractEvent(String subject, String startDateTTime, String endDateTTime) {
+    this.subject = subject;
+    String[] startString = startDateTTime.split("T");
+    String[] endString = endDateTTime.split("T");
 
+    String[] startTimeString = startString[1].split(":");
+    String[] endTimeString = endString[1].split(";");
+
+    this.startDate = new Date(startString[0]);
+    this.endDate = new Date(endString[0]);
+
+    this.times = new int[] {Integer.valueOf(startTimeString[0]),
+            Integer.valueOf(startTimeString[1]),
+            Integer.valueOf(endTimeString[0]),
+            Integer.valueOf(endTimeString[1])};
+
+  }
+
+  @Override
+  public IEvent editProperty(String prop, String eventSubject, String startDateStringTtimeString, String endDateStringTtimeString, String newPropvalue) {
+    return null;
   }
 
   @Override
