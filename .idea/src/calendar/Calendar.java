@@ -196,6 +196,7 @@ public class Calendar implements ICalendar {
   @Override
   public boolean showStatus(String dateTtime) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
+    //find event --> isBusy()
 
     return false;
   }

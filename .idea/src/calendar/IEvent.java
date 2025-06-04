@@ -23,39 +23,28 @@ public interface IEvent {
   public String getDateTtime(boolean getStart);
 
   /**
-   * Updates the property of the event matching the given subject and dateStringTtimeString with
-   * the new property value.
+   * Updates the property of the event with the new property value.
    *
-   * @param prop                       String
-   * @param eventSubject               String
-   * @param startDateStringTtimeString String
-   * @param endDateStringTtimeString   String
-   * @param newPropvalue               String
+   * @param prop         String
+   * @param newPropvalue String
    * @return IEvent
    */
-  public IEvent editProperty(String prop, String eventSubject, String startDateStringTtimeString,
-                             String endDateStringTtimeString, String newPropvalue);
-
-  /**
-   * Updates the property of the event matching the given subject and dateStringTtimeString with
-   * the new property value.
-   *
-   * @param prop                  String
-   * @param eventSubject          String
-   * @param dateStringTtimeString String
-   * @param newPropvalue          String
-   * @return IEvent
-   */
-  public IEvent editProperty(String prop, String eventSubject, String dateStringTtimeString,
-                             String newPropvalue);
+  public void editProperty(String prop, String newPropvalue);
 
   /**
    * Returns true if there is an event during the given day and time.
    *
-   * @param dateStringTtimeString String
+   * @param dateTtime String
    * @return boolean
    */
-  public boolean isBusy(String dateStringTtimeString);
+  public boolean isBusy(String dateTtime);
+
+  /**
+   * Returns true when the event is an event series.
+   *
+   * @return boolean
+   */
+  public boolean isSeries();
 
   /**
    * Returns a string with this events subject, start and end time, and location (if any).

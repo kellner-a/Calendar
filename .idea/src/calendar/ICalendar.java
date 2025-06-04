@@ -89,7 +89,7 @@ public interface ICalendar {
 
 
   /**
-   * Updates the property of the event matching the given subject and dateTtime with the new
+   * Updates the property of the event matching the given subject and dateTtimes with the new
    * property value.
    *
    * @param prop "subject", start", "end", "description", "location", or "status"

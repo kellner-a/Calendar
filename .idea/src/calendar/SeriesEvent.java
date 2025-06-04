@@ -15,6 +15,15 @@ public class SeriesEvent extends AbstractEvent {
   private int timesRepeated; // -1 when unused
   private Date stopDate; // null when unused
 
+  /**
+   * Constructs an event that repeats on given weekdays a given number of times.
+   * @param subject
+   * @param startDateTtime
+   * @param endDateTtime
+   * @param weekdays
+   * @param timesRepeated
+   */
+
   public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays,
                      int timesRepeated) {
     super(subject, startDateTtime, endDateTtime);
@@ -23,12 +32,29 @@ public class SeriesEvent extends AbstractEvent {
     this.stopDate = null;
   }
 
+  /**
+   * Constructs an event that repeats on given weekdays until a given stop date.
+   * @param subject name of the event
+   * @param startDateTtime start date and start time
+   * @param endDateTtime end date and end time
+   * @param weekdays the days of the week that the event repeats on
+   * @param stopDate the date that the event stops repeating
+   */
+
   public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays, String stopDate) {
     super(subject, startDateTtime, endDateTtime);
     this.weekdays = weekdays;
     this.timesRepeated = -1;
-    this.stopDate = null;
+    this.stopDate = stopDate;
   }
+
+  /**
+   * Constructs an all day event that repeats on given weekdays a given number of times.
+   * @param subject name of the event
+   * @param startDate the date that the event starts
+   * @param weekdays the days of the week that the event repeats on
+   * @param timesRepeated number of times the events repeat for the weekdays
+   */
 
   public SeriesEvent(String subject, String startDate, String weekdays, int timesRepeated) {
     super(subject, startDate);
@@ -37,11 +63,30 @@ public class SeriesEvent extends AbstractEvent {
     this.stopDate = null;
   }
 
+  /**
+   * Constructs an all day event that repeats on given weekdays until a given stop date.
+   * @param subject
+   * @param startDateTtime
+   * @param endDateTtime
+   * @param weekdays
+   * @param stopDate
+   */
+
   public SeriesEvent(String subject, String startDate, String weekdays, String stopDate) {
     super(subject, startDate);
     this.weekdays = weekdays;
     this.timesRepeated = -1;
     this.stopDate = stopDate;
+  }
+
+  private void reccuringDates() {
+    char[] daysOfWeek = new char[] {'M', 'T', 'W', 'R', 'F', 'S', 'U'};
+
+    if(this.timesRepeated > 0) {
+      for(int i = 0; i < this.timesRepeated; i++) {
+
+      }
+    }
   }
 
 }

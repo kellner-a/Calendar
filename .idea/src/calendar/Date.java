@@ -9,12 +9,14 @@ public class Date implements IDate {
   private int year;
   private int month;
   private int day;
+  private char dayOfWeek;
 
   public Date(String dateString) {
     String[] strings = dateString.split("-");
     this.year = Integer.valueOf(strings[0]);
     this.month = Integer.valueOf(strings[1]);
     this.day = Integer.valueOf(strings[2]);
+    this.dayOfWeek = findDayOfWeek();
 
     boolean valid = verify();
     if (!valid) {
@@ -26,22 +28,47 @@ public class Date implements IDate {
     this.year = year;
     this.month = month;
     this.day = day;
+    this.dayOfWeek = findDayOfWeek();
+
+    boolean valid = verify();
+    if (!valid) {
+      throw new IllegalArgumentException("Invalid date");
+    }
   }
 
   @Override
   public int getYear() {
-      return this.year;
-    }
+    return this.year;
+  }
 
   @Override
   public int getMonth() {
-      return this.month;
-    }
+    return this.month;
+  }
 
   @Override
   public int getDay() {
-      return this.day;
+    return this.day;
+  }
+
+  @Override
+  public int compare(IDate otherDate) {
+    if (this.year > otherDate.getYear()) {
+      return 1;
+    } else if (this.year < otherDate.getYear()) {
+      return -1;
+    } else if (this.month > otherDate.getMonth()) {
+      return 1;
+    } else if (this.month < otherDate.getMonth()) {
+      return -1;
+    } else if (this.day > otherDate.getDay()) {
+      return 1;
+    } else if (this.day < otherDate.getDay()) {
+      return -1;
+    } else {
+      return 0;
     }
+  }
 
   @Override
   public IDate getNextDate(int days) {
@@ -124,5 +151,22 @@ public class Date implements IDate {
   private boolean leap() {
     return this.year % 4 == 0 && (this.year % 100 != 0
             || (this.year % 400 == 0 && this.year % 100 == 0));
+  }
+
+  private char findDayOfWeek() {
+    int q = this.day;
+    int m = this.month;
+    int year = this.year;
+    if (this.month == 1 || this.month == 2) {
+      m += 12;
+      year -= 1;
+    }
+    int k = year % 100;
+    int j = year / 100;
+
+    int h = (q + (13 * (m + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
+
+    char[] daysOfWeek = new char[]{'S', 'U', 'M', 'T', 'W', 'R', 'F'};
+    return daysOfWeek[h];
   }
 }

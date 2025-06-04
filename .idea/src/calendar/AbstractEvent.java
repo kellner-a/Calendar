@@ -10,12 +10,12 @@ public abstract class AbstractEvent implements IEvent {
 
   protected Date startDate;
   protected Date endDate;
-  protected int[] times; //array of start/end hours and minutes
+  protected int[] times = new int[4]; //array of start/end hours and minutes
   // {startHour, startMinute, endHour, endMinute}
   protected String location;
   protected String subject;
   protected String description;
-  protected boolean status; // public or private
+  protected String status; // public or private
 
 
   /**
@@ -28,45 +28,99 @@ public abstract class AbstractEvent implements IEvent {
     String[] startString = startDateTTime.split("T");
     this.startDate = new Date(startString[0]); // makes a new date w the start time
     this.times = new int[] {8, 0 , 17, 0};
+    initializeOtherProperties();
   }
 
   public AbstractEvent(String subject, String startDateTTime, String endDateTTime) {
     this.subject = subject;
-    String[] startString = startDateTTime.split("T");
-    String[] endString = endDateTTime.split("T");
+    parseDateTtime(startDateTTime, true);
+    parseDateTtime(endDateTTime, false);
+    initializeOtherProperties();
+  }
 
-    String[] startTimeString = startString[1].split(":");
-    String[] endTimeString = endString[1].split(";");
+  private void initializeOtherProperties() {
+    this.location = "";
+    this.subject = "";
+    this.description = "";
+    this.status = "";
+  }
 
-    this.startDate = new Date(startString[0]);
-    this.endDate = new Date(endString[0]);
-
-    this.times = new int[] {Integer.valueOf(startTimeString[0]),
-            Integer.valueOf(startTimeString[1]),
-            Integer.valueOf(endTimeString[0]),
-            Integer.valueOf(endTimeString[1])};
-
+  private void parseDateTtime(String dateTtime, boolean isStart) {
+    if (isStart) {
+      String[] startString = dateTtime.split("T");
+      String[] startTimeString = startString[1].split(":");
+      this.startDate = new Date(startString[0]);
+      this.times[0] = Integer.valueOf(startTimeString[0]);
+      this.times[1] = Integer.valueOf(startTimeString[1]);
+    } else {
+      String[] endString = dateTtime.split("T");
+      String[] endTimeString = endString[1].split(";");
+      this.endDate = new Date(endString[0]);
+      this.times[0] = Integer.valueOf(endTimeString[0]);
+      this.times[1] = Integer.valueOf(endTimeString[1]);
+    }
   }
 
   @Override
-  public IEvent editProperty(String prop, String eventSubject, String startDateStringTtimeString,
-                             String endDateStringTtimeString, String newPropvalue) {
-    return null;
+  public String getDateTtime(boolean getStart) {
+    if (getStart) {
+      return this.startDate +"T"+ String.format("%02d",this.times[0]) +":"+ String.format("%02d",
+              this.times[1]);
+    } else {
+      return this.endDate +"T"+ String.format("%02d",this.times[2]) +":"+ String.format("%02d",
+              this.times[3]);
+    }
   }
 
   @Override
-  public IEvent editProperty(String prop, String eventSubject, String dateStringTtimeString,
-                             String newPropvalue) {
-    return null;
+  public void editProperty(String prop, String newPropvalue) {
+    if (prop.equals("subject")) {
+      this.subject = newPropvalue;
+    } else if (prop.equals("start")) {
+      parseDateTtime(newPropvalue, true);
+    } else if (prop.equals("end")) {
+      parseDateTtime(newPropvalue, false);
+    } else if (prop.equals("description")) {
+      this.description = newPropvalue;
+    } else if (prop.equals("location")) {
+      this.location = newPropvalue;
+    } else if (prop.equals("status")) {
+      this.status = newPropvalue;
+    }
   }
 
   @Override
-  public boolean isBusy(String dateStringTtimeString) {
+  public boolean isBusy(String dateTtime) {
+    String[] dateTime = dateTtime.split("T");
+    String[] timeString = dateTime[1].split(":");
+    int[] time = new int[2];
+    time[0] = Integer.valueOf(timeString[0]);
+    time[1] = Integer.valueOf(timeString[1]);
+    IDate date = new Date(dateTime[0]);
+    if (date.compare(this.startDate) == 0 && date.compare(this.endDate) == 0) {
+      if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1] && time[1]
+              <= this.times[3]) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (date.compare(this.startDate) >= 0 && date.compare(this.endDate) <= 0) {
+      return true;
+    }
     return false;
   }
 
   @Override
+  public abstract boolean isSeries();
+
+  @Override
   public String toString() {
-    return "";
+    String event =
+            this.subject+": "+ String.valueOf(this.times[0])+":"+String.valueOf(this.times[1]) +
+                    " - "+String.valueOf(this.times[2]) +":"+String.valueOf(this.times[3]);
+    if (this.location.isEmpty()){
+      return event;
+    }
+    return event +" @ "+ this.location;
   }
 }
