@@ -49,12 +49,14 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
-  public IEvent editProperty(String prop, String eventSubject, String startDateStringTtimeString, String endDateStringTtimeString, String newPropvalue) {
+  public IEvent editProperty(String prop, String eventSubject, String startDateStringTtimeString,
+                             String endDateStringTtimeString, String newPropvalue) {
     return null;
   }
 
   @Override
-  public IEvent editProperty(String prop, String eventSubject, String dateStringTtimeString, String newPropvalue) {
+  public IEvent editProperty(String prop, String eventSubject, String dateStringTtimeString,
+                             String newPropvalue) {
     return null;
   }
 

@@ -22,7 +22,7 @@ public class Calendar implements ICalendar {
    * Constructor for a calendar. Takes in a dateString as the current date and initializes its
    * list of events.
    *
-   * @param date "YYYY-MM-DD" or "YYYY-M-D"
+   * @param date "YYYY-M(M)-D(D)"
    * @throws IllegalArgumentException when date format isn't matched
    */
   public Calendar(String date) throws IllegalArgumentException {
@@ -35,7 +35,7 @@ public class Calendar implements ICalendar {
    * Throws an exception if date is formatted incorrectly.
    *
    * @param date String
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if not "YYYY-M(M)-D(D)?"
    */
   private void validateDate(String date) throws IllegalArgumentException {
     if (!Pattern.matches("^\\d\\d\\d\\d-\\d\\d?-\\d\\d?$", date)) {
@@ -47,7 +47,7 @@ public class Calendar implements ICalendar {
    * Throws an exception if time is formatted incorrectly.
    *
    * @param time String
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if not "h(h):m(m)"
    */
   private void validateTime(String time) throws IllegalArgumentException {
     if (!Pattern.matches("^\\d\\d?:\\d\\d?$", time)) {
@@ -59,7 +59,7 @@ public class Calendar implements ICalendar {
    * Throws an exception if dateTtime is formatted incorrectly.
    *
    * @param dateTtime
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if not "YYYY-M(M)-D(D)Th(h):m(m)"
    */
   private void validateDateTtime(String dateTtime) throws IllegalArgumentException {
     if (!Pattern.matches("^\\d\\d\\d\\d-\\d\\d?-\\d\\d?T\\d\\d?:\\d\\d?$", dateTtime)
@@ -68,72 +68,135 @@ public class Calendar implements ICalendar {
     }
   }
 
+  /**
+   * Throws an exception if weekdays is formatted incorrectly.
+   *
+   * @param weekdays String
+   * @throws IllegalArgumentException if not MTWRFSU
+   */
   private void validateWeekdays(String weekdays) throws IllegalArgumentException {
     if (!Pattern.matches("^M?T?W?R?F?S?U?$", weekdays) || weekdays.isEmpty()) {
       throw new IllegalArgumentException("Invalid weekdays");
     }
   }
 
+  /**
+   * Throws an error if property is not "subject", start", "end", "description", "location",
+   * "status".
+   *
+   * @param newPropvalue
+   */
+  private void validateProperty(String prop) throws IllegalArgumentException {
+    if (!prop.equals("subject") && !prop.equals("start") && !prop.equals("end") && !prop.equals(
+            "description") && !prop.equals("locations") && !prop.equals("status")) {
+      throw new IllegalArgumentException("Invalid property");
+    }
+  }
+
   @Override
-  public void createSingleEvent(String subject, String startDateTtime, String endDateTtime) throws IllegalArgumentException {
+  public void createSingleEvent(String subject, String startDateTtime, String endDateTtime)
+          throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     this.events.add(new SingleEvent(subject, startDateTtime, endDateTtime));
   }
 
   @Override
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime, String weekdays, int timesRepeated) throws IllegalArgumentException {
+  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
+                                String weekdays, int timesRepeated)
+          throws IllegalArgumentException {
+    if (timesRepeated <= 0) throw new IllegalArgumentException("Invalid times to repeat");
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
+    validateWeekdays(weekdays);
+    this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays,
+            timesRepeated));
   }
 
   @Override
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime, String weekdays, String stopDate) throws IllegalArgumentException {
-
+  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
+                                String weekdays, String stopDate) throws IllegalArgumentException {
+    validateDateTtime(startDateTtime);
+    validateDateTtime(endDateTtime);
+    validateWeekdays(weekdays);
+    validateTime(stopDate);
+    this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate));
   }
 
   @Override
   public void createSingleEvent(String subject, String date) throws IllegalArgumentException {
+    validateDate(date);
+    this.events.add(new SingleEvent(subject, date));
+  }
+
+  @Override
+  public void createEventSeries(String subject, String startDate, String weekdays,
+                                int timesRepeated) throws IllegalArgumentException {
+    if (timesRepeated <= 0) throw new IllegalArgumentException("Invalid times to repeat");
+    validateDate(startDate);
+    validateDate(weekdays);
+    this.events.add(new SeriesEvent(subject, startDate, weekdays, timesRepeated));
+  }
+
+  @Override
+  public void createEventSeries(String subject, String startDate, String weekdays, String stopDate)
+          throws IllegalArgumentException {
+    validateDate(startDate);
+    validateDate(weekdays);
+    validateTime(stopDate);
+    this.events.add(new SeriesEvent(subject, startDate, weekdays, stopDate));
+  }
+
+  @Override
+  public void editEventProperty(String prop, String eventSubject, String startDateTtime,
+                                String endDateTtime, String newPropvalue)
+          throws IllegalArgumentException {
+    validateDateTtime(startDateTtime);
+    validateDateTtime(endDateTtime);
+    validateProperty(prop);
+    for (IEvent event: this.events) {
+      if (event.getSubject().equals(eventSubject)
+              && event.getDateTtime(true).equals(startDateTtime)
+              && event.getDateTtime(false).equals(endDateTtime)) {
+
+      }
+    }
 
   }
 
   @Override
-  public void createEventSeries(String subject, String startDate, String weekdays, int timesRepeated) throws IllegalArgumentException {
-
+  public void editEventsProperty(String prop, String eventSubject, String dateTtime,
+                                 String newPropvalue) throws IllegalArgumentException {
+    validateDateTtime(dateTtime);
+    validateProperty(prop);
   }
 
   @Override
-  public void createEvent(String subject, String startDate, String weekdays, String stopDate) throws IllegalArgumentException {
-
+  public void editSeriesProperty(String prop, String eventSubject, String dateTtime,
+                                 String newPropvalue) throws IllegalArgumentException {
+    validateDateTtime(dateTtime);
+    validateProperty(prop);
   }
 
   @Override
-  public void editEventProperty(String prop, String eventSubject, String startDateTtime, String endDateTtime, String newPropvalue) throws IllegalArgumentException {
+  public ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException {
+    validateDate(date);
 
-  }
-
-  @Override
-  public void editEventsProperty(String prop, String eventSubject, String dateTtime, String newPropvalue) throws IllegalArgumentException {
-
-  }
-
-  @Override
-  public void editSeriesProperty(String prop, String eventSubject, String dateTtime, String newPropvalue) throws IllegalArgumentException {
-
-  }
-
-  @Override
-  public ArrayList<calendar.IEvent> getEvents(String date) throws IllegalArgumentException {
     return null;
   }
 
   @Override
-  public ArrayList<calendar.IEvent> getEvents(String date1, String date2) throws IllegalArgumentException {
+  public ArrayList<IEvent> getEvents(String date1, String date2) throws IllegalArgumentException {
+    validateDate(date1);
+    validateDate(date2);
+
     return null;
   }
 
   @Override
   public boolean showStatus(String dateTtime) throws IllegalArgumentException {
+    validateDateTtime(dateTtime);
+
     return false;
   }
 }

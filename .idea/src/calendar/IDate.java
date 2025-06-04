@@ -3,7 +3,6 @@ package calendar;
 /**
  * Represents a date in terms of a day, month, year, and day of the week.
  */
-
 public interface IDate {
 
   /**

@@ -11,13 +11,37 @@ import java.util.ArrayList;
 public class SeriesEvent extends AbstractEvent {
 
   private ArrayList<Date> recurringDates;
+  private String weekdays;
+  private int timesRepeated; // -1 when unused
+  private Date stopDate; // null when unused
 
-  public SeriesEvent(String subject, String startDateTTime, String endDateTTIme, ...) {
-    super(subject, startDateTTime, endDateTTIme);
+  public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays,
+                     int timesRepeated) {
+    super(subject, startDateTtime, endDateTtime);
+    this.weekdays = weekdays;
+    this.timesRepeated = timesRepeated;
+    this.stopDate = null;
   }
 
-  public SeriesEvent(String subject, boolean status, Date start, Date end, int num, Day[] day) {
-    super(subject, start, status);
-    // create arraylist of days from inputted
+  public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays, String stopDate) {
+    super(subject, startDateTtime, endDateTtime);
+    this.weekdays = weekdays;
+    this.timesRepeated = -1;
+    this.stopDate = null;
   }
+
+  public SeriesEvent(String subject, String startDate, String weekdays, int timesRepeated) {
+    super(subject, startDate);
+    this.weekdays = weekdays;
+    this.timesRepeated = timesRepeated;
+    this.stopDate = null;
+  }
+
+  public SeriesEvent(String subject, String startDate, String weekdays, String stopDate) {
+    super(subject, startDate);
+    this.weekdays = weekdays;
+    this.timesRepeated = -1;
+    this.stopDate = stopDate;
+  }
+
 }

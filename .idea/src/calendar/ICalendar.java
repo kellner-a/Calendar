@@ -84,7 +84,7 @@ public interface ICalendar {
    * @throws IllegalArgumentException when input doesn't match specified pattern, stopDate is
    * before startDate
    */
-  public void createEvent(String subject, String startDate, String weekdays, String stopDate)
+  public void createEventSeries(String subject, String startDate, String weekdays, String stopDate)
           throws IllegalArgumentException;
 
 
