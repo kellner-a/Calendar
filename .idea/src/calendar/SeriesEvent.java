@@ -1,6 +1,7 @@
 package calendar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class represents a series of events. A series of events repeat for a specified number of
@@ -36,11 +37,11 @@ public class SeriesEvent extends AbstractEvent {
   /**
    * Constructs an event that repeats on given weekdays until a given stop date.
    *
-   * @param subject name of the event
+   * @param subject        name of the event
    * @param startDateTtime start date and start time
-   * @param endDateTtime end date and end time
-   * @param weekdays the days of the week that the event repeats on
-   * @param stopDate the date that the event stops repeating
+   * @param endDateTtime   end date and end time
+   * @param weekdays       the days of the week that the event repeats on
+   * @param stopDate       the date that the event stops repeating
    */
   public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays,
                      String stopDate) {
@@ -54,9 +55,9 @@ public class SeriesEvent extends AbstractEvent {
   /**
    * Constructs an all day event that repeats on given weekdays a given number of times.
    *
-   * @param subject name of the event
-   * @param startDate the date that the event starts
-   * @param weekdays the days of the week that the event repeats on
+   * @param subject       name of the event
+   * @param startDate     the date that the event starts
+   * @param weekdays      the days of the week that the event repeats on
    * @param timesRepeated number of times the events repeat for the weekdays
    */
   public SeriesEvent(String subject, String startDate, String weekdays, int timesRepeated) {
@@ -69,6 +70,7 @@ public class SeriesEvent extends AbstractEvent {
 
   /**
    * Constructs an all day event that repeats on given weekdays until a given stop date.
+   *
    * @param subject
    * @param startDateTtime
    * @param endDateTtime
@@ -84,11 +86,23 @@ public class SeriesEvent extends AbstractEvent {
   }
 
   private void reccuringDates() {
-    char[] daysOfWeek = new char[] {'M', 'T', 'W', 'R', 'F', 'S', 'U'};
+    ArrayList<String> week = new ArrayList<String>(Arrays.asList("M", "T", "W", "R", "F", "S", "U"));
+    String[] daysThatRecur = this.weekdays.split("(?!^)");
+    Date result = this.startDate;
 
-    if(this.timesRepeated > 0) {
-      for(int i = 0; i < this.timesRepeated; i++) {
-
+    if (this.timesRepeated > 0) {
+      for (int i = 0; i < this.timesRepeated; i++) {
+        for (int j = 0; j < daysThatRecur.length; j++) {
+          if (week.indexOf(daysThatRecur[j]) < week.indexOf(result.dayOfWeek)) {
+            // does nothing because the day that the event should occur is before the startdate
+          }
+          else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[j])) {
+            this.recurringDates.add(result);
+          } else if (week.indexOf(daysThatRecur[j]) > week.indexOf(result.dayOfWeek)) {
+            result = result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek));
+            this.recurringDates.add(result);
+          }
+        }
       }
     }
   }
@@ -97,7 +111,7 @@ public class SeriesEvent extends AbstractEvent {
    * Returns a dateTtime string of the event at the given index.
    *
    * @param eventIndex positive integer
-   * @param isStart boolean, true if getting startDateTtime,
+   * @param isStart    boolean, true if getting startDateTtime,
    * @return String
    */
   private String getDateTtime(int eventIndex, boolean isStart) {

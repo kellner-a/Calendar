@@ -6,10 +6,10 @@ package calendar;
  */
 public class Date implements IDate {
 
-  private int year;
-  private int month;
-  private int day;
-  private char dayOfWeek;
+  protected int year;
+  protected int month;
+  protected int day;
+  protected char dayOfWeek;
 
   public Date(String dateString) {
     String[] strings = dateString.split("-");

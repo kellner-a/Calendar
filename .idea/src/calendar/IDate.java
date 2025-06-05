@@ -38,7 +38,7 @@ public interface IDate {
   /**
    * Returns a new Date x days after this current date. Given 5 when this current date is
    * 2025-06-02 Monday, the new Date returned would be 2025-06-07 Saturday.
-   * 
+   *
    * @param days
    * @return new Date
    */
