@@ -20,6 +20,7 @@ public abstract class AbstractEvent implements IEvent {
 
   /**
    * Constructs an all day event with a subject and a start date.
+   *
    * @param subject subject of the event
    * @param startDateTTime the start date and start time as a string
    */
@@ -38,14 +39,14 @@ public abstract class AbstractEvent implements IEvent {
     initializeOtherProperties();
   }
 
-  private void initializeOtherProperties() {
+  protected void initializeOtherProperties() {
     this.location = "";
     this.subject = "";
     this.description = "";
     this.status = "";
   }
 
-  private void parseDateTtime(String dateTtime, boolean isStart) {
+  protected void parseDateTtime(String dateTtime, boolean isStart) {
     if (isStart) {
       String[] startString = dateTtime.split("T");
       String[] startTimeString = startString[1].split(":");
@@ -61,8 +62,7 @@ public abstract class AbstractEvent implements IEvent {
     }
   }
 
-  @Override
-  public String getDateTtime(boolean getStart) {
+  protected String getDateTtime(boolean getStart) {
     if (getStart) {
       return this.startDate +"T"+ String.format("%02d",this.times[0]) +":"+ String.format("%02d",
               this.times[1]);
@@ -70,6 +70,15 @@ public abstract class AbstractEvent implements IEvent {
       return this.endDate +"T"+ String.format("%02d",this.times[2]) +":"+ String.format("%02d",
               this.times[3]);
     }
+  }
+
+  @Override
+  public boolean match(String subject, String startDateTtime, String endDateTtime) {
+    if (this.subject.equals(subject) && getDateTtime(true).equals(startDateTtime)
+            && getDateTtime(false).equals(endDateTtime)) {
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -98,8 +107,8 @@ public abstract class AbstractEvent implements IEvent {
     time[1] = Integer.valueOf(timeString[1]);
     IDate date = new Date(dateTime[0]);
     if (date.compare(this.startDate) == 0 && date.compare(this.endDate) == 0) {
-      if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1] && time[1]
-              <= this.times[3]) {
+      if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
+              && time[1] <= this.times[3]) {
         return true;
       } else {
         return false;

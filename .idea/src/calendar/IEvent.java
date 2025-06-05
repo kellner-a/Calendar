@@ -8,19 +8,14 @@ package calendar;
 public interface IEvent {
 
   /**
-   * Returns the event's subject.
+   * Returns true if this event matches the given subject, startDateTtime, and endDateTtime.
    *
-   * @return String
+   * @param subject String
+   * @param startDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime "YYYY-MM-DDThh:mm"
+   * @return boolean
    */
-  public String getSubject();
-
-  /**
-   * Returns a dateTtime for either the events startDateTtime or endDateTtime.
-   *
-   * @param getStart true for getting the startDateTtime, false for getting the endDateTtime
-   * @return dateTtime, "YYYY-MM-DDThh:mm"
-   */
-  public String getDateTtime(boolean getStart);
+  public boolean match(String subject, String startDateTtime, String endDateTtime);
 
   /**
    * Updates the property of the event with the new property value.

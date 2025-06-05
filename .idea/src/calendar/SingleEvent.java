@@ -1,4 +1,4 @@
-package Calendar;
+package calendar;
 
 /**
  * This class represents a single event. A single event can span multiple days.
