@@ -57,8 +57,10 @@ public abstract class AbstractEvent implements IEvent {
    * @param status String
    * @return IEvent
    */
-  protected abstract IEvent copy(String subject, Date startDateTtime, Date endDateTtime,
-                          String location, String description, String status);
+  protected IEvent copy(String subject, String startDateTtime, String endDateTtime,
+                          String location, String description, String status) {
+    return new SingleEvent(subject, startDateTtime, endDateTtime, location, description, status);
+  }
 
   /**
    * Parses the given dateTtime and initializes the startDateTtime or endDateTtime based on the
