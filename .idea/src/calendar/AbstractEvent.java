@@ -79,7 +79,7 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
-  public void editProperty(String prop, String newPropvalue) {
+  public void editEventProperty(String prop, String newPropvalue) {
     if (prop.equals("subject")) {
       this.subject = newPropvalue;
     } else if (prop.equals("start")) {
@@ -96,6 +96,16 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
+  public void editEventsProperty(String prop, String dateTtime, String newPropvalue) {
+    this.editEventProperty(prop, newPropvalue);
+  }
+
+  @Override
+  public void editSeriesProperty(String prop, String newPropvalue) {
+    this.editEventProperty(prop, newPropvalue);
+  }
+
+  @Override
   public boolean isBusy(String dateTtime) {
     String[] dateTime = dateTtime.split("T");
     String[] timeString = dateTime[1].split(":");
@@ -104,16 +114,10 @@ public abstract class AbstractEvent implements IEvent {
     time[1] = Integer.valueOf(timeString[1]);
     IDate date = new Date(dateTime[0]);
     if (date.compare(this.startDate) == 0 && date.compare(this.endDate) == 0) {
-      if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
-              && time[1] <= this.times[3]) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (date.compare(this.startDate) >= 0 && date.compare(this.endDate) <= 0) {
-      return true;
+      return this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
+              && time[1] <= this.times[3];
     }
-    return false;
+    return date.compare(this.startDate) >= 0 && date.compare(this.endDate) <= 0;
   }
 
   @Override

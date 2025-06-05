@@ -33,7 +33,7 @@ public interface IEvent {
    * @param newPropvalue String
    * @return IEvent
    */
-  public void editProperty(String prop, String newPropvalue);
+  public void editEventProperty(String prop, String newPropvalue);
 
   /**
    * Updates the property of events following the given dateTtime if this event is a series. If

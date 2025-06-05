@@ -30,6 +30,7 @@ public class SeriesEvent extends AbstractEvent {
     this.weekdays = weekdays;
     this.timesRepeated = timesRepeated;
     this.stopDate = null;
+    super.initializeOtherProperties();
   }
 
   /**
@@ -47,6 +48,7 @@ public class SeriesEvent extends AbstractEvent {
     this.weekdays = weekdays;
     this.timesRepeated = -1;
     this.stopDate = stopDate;
+    super.initializeOtherProperties();
   }
 
   /**
@@ -62,6 +64,7 @@ public class SeriesEvent extends AbstractEvent {
     this.weekdays = weekdays;
     this.timesRepeated = timesRepeated;
     this.stopDate = null;
+    super.initializeOtherProperties();
   }
 
   /**
@@ -77,6 +80,7 @@ public class SeriesEvent extends AbstractEvent {
     this.weekdays = weekdays;
     this.timesRepeated = -1;
     this.stopDate = stopDate;
+    super.initializeOtherProperties();
   }
 
   private void reccuringDates() {
@@ -98,17 +102,17 @@ public class SeriesEvent extends AbstractEvent {
    */
   private String getDateTtime(int eventIndex, boolean isStart) {
     if (isStart) {
-      return this.recurringDates[eventIndex].toString() + "T" +  String.format("%02d",this.times[0])
-              +":"+ String.format("%02d", this.times[1]);
+      return this.recurringDates[eventIndex].toString() + "T" +  String.format("%02d",super.times[0])
+              +":"+ String.format("%02d", super.times[1]);
     } else {
-      return this.recurringDates[eventIndex].toString() +  "T" + String.format("%02d",this.times[2])
-              +":"+ String.format("%02d", this.times[3]);
+      return this.recurringDates[eventIndex].toString() +  "T" + String.format("%02d",super.times[2])
+              +":"+ String.format("%02d", super.times[3]);
     }
   }
 
   @Override
   public boolean match(String subject, String startDateTtime, String endDateTtime) {
-    if (!this.subject.equals(subject)) {
+    if (!super.subject.equals(subject)) {
       return false;
     }
     for (int i = 0; i < this.recurringDates; i++) {
@@ -118,6 +122,36 @@ public class SeriesEvent extends AbstractEvent {
       }
     }
     return false;
+  }
+
+  @Override
+  public void editEventProperty(String prop, String newPropvalue) {
+    // double check and change
+    if (prop.equals("subject")) {
+      super.subject = newPropvalue;
+    } else if (prop.equals("start")) {
+      super.parseDateTtime(newPropvalue, true);
+    } else if (prop.equals("end")) {
+      super.parseDateTtime(newPropvalue, false);
+    } else if (prop.equals("description")) {
+      super.description = newPropvalue;
+    } else if (prop.equals("location")) {
+      super.location = newPropvalue;
+    } else if (prop.equals("status")) {
+      super.status = newPropvalue;
+    }
+  }
+
+  @Override
+  public void editEventsProperty(String prop, String dateTtime, String newPropvalue) {
+
+
+  }
+
+  @Override
+  public void editSeriesProperty(String prop, String newPropvalue) {
+
+
   }
 
   @Override
