@@ -48,7 +48,7 @@ public class SeriesEvent extends AbstractEvent {
     super(subject, startDateTtime, endDateTtime);
     this.weekdays = weekdays;
     this.timesRepeated = -1;
-    this.stopDate = stopDate;
+    this.stopDate = new Date(stopDate);
     super.initializeOtherProperties();
   }
 
@@ -72,8 +72,7 @@ public class SeriesEvent extends AbstractEvent {
    * Constructs an all day event that repeats on given weekdays until a given stop date.
    *
    * @param subject
-   * @param startDateTtime
-   * @param endDateTtime
+   * @param startDate
    * @param weekdays
    * @param stopDate
    */
@@ -81,7 +80,7 @@ public class SeriesEvent extends AbstractEvent {
     super(subject, startDate);
     this.weekdays = weekdays;
     this.timesRepeated = -1;
-    this.stopDate = stopDate;
+    this.stopDate = new Date(startDate);
     super.initializeOtherProperties();
   }
 
@@ -136,12 +135,18 @@ public class SeriesEvent extends AbstractEvent {
    */
   private String getDateTtime(int eventIndex, boolean isStart) {
     if (isStart) {
-      return this.recurringDates[eventIndex].toString() + "T" +  String.format("%02d",super.times[0])
+      return this.recurringDates.get(eventIndex).toString() + "T" +  String.format("%02d",super.times[0])
               +":"+ String.format("%02d", super.times[1]);
     } else {
-      return this.recurringDates[eventIndex].toString() +  "T" + String.format("%02d",super.times[2])
+      return this.recurringDates.get(eventIndex).toString() +  "T" + String.format("%02d",
+              super.times[2])
               +":"+ String.format("%02d", super.times[3]);
     }
+  }
+
+  @Override
+  protected IEvent copy(String subject, Date startDate, Date endDate, int[] times, String location, String description, String status) {
+    return null;
   }
 
   @Override
@@ -149,7 +154,7 @@ public class SeriesEvent extends AbstractEvent {
     if (!super.subject.equals(subject)) {
       return false;
     }
-    for (int i = 0; i < this.recurringDates; i++) {
+    for (int i = 0; i < this.recurringDates.size(); i++) {
       if (getDateTtime(i, true).equals(startDateTtime)
               && (getDateTtime(i, false).equals(endDateTtime) || endDateTtime.isEmpty())) {
         return true;
@@ -159,38 +164,55 @@ public class SeriesEvent extends AbstractEvent {
   }
 
   @Override
+  public boolean match(String subject, String startDateTtime) {
+    return false;
+  }
+
+  @Override
   public IEvent editEventProperty(String prop, String newPropvalue) {
-    // double check and change
-    // needs to return an event
     if (prop.equals("subject")) {
-      return this.copy(newPropvalue, super.startDate, super.endDate, super.times, super.location,
-              super.description, super.status);
+      // remove from series
+      return this.copy(newPropvalue, this.startDate, this.endDate, this.times, this.location,
+              this.description, this.status);
     } else if (prop.equals("start")) {
       //super.parseDateTtime(newPropvalue, true);
-      // delete ^
-      return this.copy(newPropvalue, super.startDate, super.endDate, super.times, super.location,
-              super.description, super.status);
+      // delete ^ and remove from series
+      return this.copy(this.subject, this.startDate, this.endDate, this.times, this.location,
+              this.description, this.status);
     } else if (prop.equals("end")) {
-      super.parseDateTtime(newPropvalue, false);
+      //super.parseDateTtime(newPropvalue, false);
+      // delete ^ and remove from series
+      return this.copy(this.subject, this.startDate, this.endDate, this.times, this.location,
+              this.description, this.status);
     } else if (prop.equals("description")) {
-      super.description = newPropvalue;
+      //super.description = newPropvalue;
+      // delete ^ and remove from series
+      return this.copy(this.subject, this.startDate, this.endDate, this.times, this.location,
+              newPropvalue, this.status);
     } else if (prop.equals("location")) {
-      super.location = newPropvalue;
+      //super.location = newPropvalue;
+      // delete ^ and remove from series
+      return this.copy(this.subject, this.startDate, this.endDate, this.times, newPropvalue,
+              this.description, this.status);
     } else if (prop.equals("status")) {
-      super.status = newPropvalue;
+      //super.status = newPropvalue;
+      // delete ^ and remove from series
+      return this.copy(this.subject, this.startDate, this.endDate, this.times, this.location,
+              this.description, newPropvalue);
     }
+    throw new IllegalArgumentException("Invalid property");
   }
 
   @Override
   public IEvent editEventsProperty(String prop, String dateTtime, String newPropvalue) {
 
-
+    return copy();
   }
 
   @Override
   public IEvent editSeriesProperty(String prop, String newPropvalue) {
 
-
+    return copy();
   }
 
   @Override

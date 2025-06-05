@@ -9,9 +9,24 @@ public class SingleEvent extends AbstractEvent {
     super(subject, startDateTTime);
   }
 
-  public SingleEvent(String subject, String startDateTTime, String endDateTTIme,
-                     char[] weekdays, int numTimes) {
-    super(subject, startDateTTIme, endDateTTIme );
+  public SingleEvent(String subject, String startDateTtime, String endDateTTIme) {
+    super(subject, startDateTtime, endDateTTIme );
+  }
+
+  @Override
+  protected IEvent copy(String subject, Date startDate, Date endDate, int[] times, String location,
+                        String description, String status) {
+    return null;
+  }
+
+  @Override
+  public boolean match(String subject, String startDateTtime) {
+    return false;
+  }
+
+  @Override
+  public boolean isSeries() {
+    return false;
   }
 
   private Date[] weekDaysToDates(char[] weekdays) {

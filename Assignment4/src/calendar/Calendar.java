@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class Calendar implements ICalendar {
 
-  private Date currentDate;
+  private IDate currentDate;
   private List<IEvent> events;
 
   /**
@@ -84,7 +84,7 @@ public class Calendar implements ICalendar {
    * Throws an error if property is not "subject", start", "end", "description", "location",
    * "status".
    *
-   * @param newPropvalue
+   * @param prop
    */
   private void validateProperty(String prop) throws IllegalArgumentException {
     if (!prop.equals("subject") && !prop.equals("start") && !prop.equals("end") && !prop.equals(

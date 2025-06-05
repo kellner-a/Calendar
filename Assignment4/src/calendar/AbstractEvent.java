@@ -27,8 +27,8 @@ public abstract class AbstractEvent implements IEvent {
   public AbstractEvent(String subject, String startDateTTime) {
     this.subject = subject;
     String[] startString = startDateTTime.split("T");
-    startDate = new Date(startString[0]); // makes a new date w the start time
-    endDate = new Date(startString[0]);
+    this.startDate = new Date(startString[0]); // makes a new date w the start time
+    this.endDate = new Date(startString[0]);
     this.times = new int[] {8, 0 , 17, 0};
     initializeOtherProperties();
   }
@@ -72,15 +72,15 @@ public abstract class AbstractEvent implements IEvent {
     if (isStart) {
       String[] startString = dateTtime.split("T");
       String[] startTimeString = startString[1].split(":");
-      startDate = new Date(startString[0]);
-      this.times[0] = Integer.valueOf(startTimeString[0]);
-      this.times[1] = Integer.valueOf(startTimeString[1]);
+      this.startDate = new Date(startString[0]);
+      this.times[0] = Integer.parseInt(startTimeString[0]);
+      this.times[1] = Integer.parseInt(startTimeString[1]);
     } else {
       String[] endString = dateTtime.split("T");
       String[] endTimeString = endString[1].split(";");
-      endDate = new Date(endString[0]);
-      this.times[0] = Integer.valueOf(endTimeString[0]);
-      this.times[1] = Integer.valueOf(endTimeString[1]);
+      this.endDate = new Date(endString[0]);
+      this.times[0] = Integer.parseInt(endTimeString[0]);
+      this.times[1] = Integer.parseInt(endTimeString[1]);
     }
   }
 
@@ -108,18 +108,25 @@ public abstract class AbstractEvent implements IEvent {
 
   @Override
   public IEvent editEventProperty(String prop, String newPropvalue) {
-    if (prop.equals("subject")) {
-      this.subject = newPropvalue;
-    } else if (prop.equals("start")) {
-      parseDateTtime(newPropvalue, true);
-    } else if (prop.equals("end")) {
-      parseDateTtime(newPropvalue, false);
-    } else if (prop.equals("description")) {
-      this.description = newPropvalue;
-    } else if (prop.equals("location")) {
-      this.location = newPropvalue;
-    } else if (prop.equals("status")) {
-      this.status = newPropvalue;
+    switch (prop) {
+      case "subject":
+        this.subject = newPropvalue;
+        break;
+      case "start":
+        parseDateTtime(newPropvalue, true);
+        break;
+      case "end":
+        parseDateTtime(newPropvalue, false);
+        break;
+      case "description":
+        this.description = newPropvalue;
+        break;
+      case "location":
+        this.location = newPropvalue;
+        break;
+      case "status":
+        this.status = newPropvalue;
+        break;
     }
     return copy(this.subject, startDate, endDate, this.times, this.location,
             this.description, this.status);
@@ -140,10 +147,10 @@ public abstract class AbstractEvent implements IEvent {
     String[] dateTime = dateTtime.split("T");
     String[] timeString = dateTime[1].split(":");
     int[] time = new int[2];
-    time[0] = Integer.valueOf(timeString[0]);
-    time[1] = Integer.valueOf(timeString[1]);
+    time[0] = Integer.parseInt(timeString[0]);
+    time[1] = Integer.parseInt(timeString[1]);
     IDate date = new Date(dateTime[0]);
-    if (date.compare(startDate) == 0 && date.compare(endDate) == 0) {
+    if (date.compare(this.startDate) == 0 && date.compare(this.endDate) == 0) {
       return this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
               && time[1] <= this.times[3];
     }
