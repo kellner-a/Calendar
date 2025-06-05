@@ -113,7 +113,7 @@ public class SeriesEvent extends AbstractEvent {
     }
     for (int i = 0; i < this.recurringDates; i++) {
       if (getDateTtime(i, true).equals(startDateTtime)
-              && getDateTtime(i, false).equals(endDateTtime)) {
+              && (getDateTtime(i, false).equals(endDateTtime) || endDateTtime.isEmpty())) {
         return true;
       }
     }

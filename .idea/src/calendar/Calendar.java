@@ -101,18 +101,19 @@ public class Calendar implements ICalendar {
    * @param startDateTtime dateTtime
    * @param endDateTtime dateTtime
    * @return IEvent, Single or Series
+   * @throws IllegalArgumentException when no event matches the given input
    */
-  private IEvent findEvent(String subject, String startDateTtime, String endDateTtime) {
-    IEvent temp;
+  private IEvent findEvent(String subject, String startDateTtime, String endDateTtime)
+          throws IllegalArgumentException{
+    IEvent temp = null;
     for (IEvent event: this.events) {
-      if (event.isSeries()) {
-        if (event.match(subject, startDateTtime, endDateTtime)) {
-          temp = event;
-          break;
-        }
-      } else {
-
+      if (event.match(subject, startDateTtime, endDateTtime)) {
+        temp = event;
+        break;
       }
+    }
+    if (temp == null) {
+      throw new IllegalArgumentException("Event does not exist");
     }
     return temp;
   }
@@ -179,7 +180,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(endDateTtime);
     validateProperty(prop);
     IEvent eventToEdit = findEvent(eventSubject, startDateTtime, endDateTtime);
-
+    eventToEdit.editProperty(prop, newPropvalue);
   }
 
   @Override
@@ -187,6 +188,8 @@ public class Calendar implements ICalendar {
                                  String newPropvalue) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
     validateProperty(prop);
+    IEvent eventToEdit = findEvent(eventSubject, dateTtime, "");
+    eventToEdit.editEventsProperty(prop, dateTtime, newPropvalue);
   }
 
   @Override
@@ -194,11 +197,14 @@ public class Calendar implements ICalendar {
                                  String newPropvalue) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
     validateProperty(prop);
+    IEvent eventToEdit = findEvent(eventSubject, dateTtime, "");
+    eventToEdit.editSeriesProperty(prop, newPropvalue);
   }
 
   @Override
   public ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException {
     validateDate(date);
+
 
     return null;
   }
@@ -207,6 +213,7 @@ public class Calendar implements ICalendar {
   public ArrayList<IEvent> getEvents(String date1, String date2) throws IllegalArgumentException {
     validateDate(date1);
     validateDate(date2);
+
 
     return null;
   }

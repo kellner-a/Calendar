@@ -74,11 +74,8 @@ public abstract class AbstractEvent implements IEvent {
 
   @Override
   public boolean match(String subject, String startDateTtime, String endDateTtime) {
-    if (this.subject.equals(subject) && getDateTtime(true).equals(startDateTtime)
-            && getDateTtime(false).equals(endDateTtime)) {
-      return true;
-    }
-    return false;
+    return this.subject.equals(subject) && getDateTtime(true).equals(startDateTtime)
+            && (getDateTtime(false).equals(endDateTtime) || endDateTtime.isEmpty());
   }
 
   @Override

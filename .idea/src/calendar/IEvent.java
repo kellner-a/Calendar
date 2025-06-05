@@ -18,6 +18,15 @@ public interface IEvent {
   public boolean match(String subject, String startDateTtime, String endDateTtime);
 
   /**
+   * Returns true if this event matches the given subject and startDateTtime.
+   *
+   * @param subject String
+   * @param startDateTtime "YYYY-MM-DDThh:mm"
+   * @return boolean
+   */
+  public boolean match(String subject, String startDateTtime);
+
+  /**
    * Updates the property of the event with the new property value.
    *
    * @param prop         String
@@ -25,6 +34,26 @@ public interface IEvent {
    * @return IEvent
    */
   public void editProperty(String prop, String newPropvalue);
+
+  /**
+   * Updates the property of events following the given dateTtime if this event is a series. If
+   * this event is not a series, this method operates the same as editProperty.
+   *
+   * @param prop String
+   * @param dateTtime "YYYY-MM-DDThh:mm"
+   * @param newPropvalue String
+   */
+  public void editEventsProperty(String prop, String dateTtime, String newPropvalue);
+
+  /**
+   * Updates the property of all events if this event is a series. If this event is not a series,
+   * this method operates the same as editProperty.
+   *
+   * @param prop String
+   * @param dateTtime "YYYY-MM-DDThh:mm"
+   * @param newPropvalue String
+   */
+  public void editSeriesProperty(String prop, String newPropvalue);
 
   /**
    * Returns true if there is an event during the given day and time.
