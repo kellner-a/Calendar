@@ -145,7 +145,8 @@ public class SeriesEvent extends AbstractEvent {
   }
 
   @Override
-  protected IEvent copy(String subject, Date startDate, Date endDate, int[] times, String location, String description, String status) {
+  protected IEvent copy(String subject, Date startDateTtime, Date endDateTtime,
+                        String location, String description, String status) {
     return null;
   }
 
@@ -169,7 +170,14 @@ public class SeriesEvent extends AbstractEvent {
   }
 
   @Override
-  public IEvent editEventProperty(String prop, String newPropvalue) {
+  public IEvent editEventProperty(String prop, String dateTtime, String newPropvalue) {
+    String[] dateTime = dateTtime.split("T");
+    int eventIndex = -1;
+    for (int i = 0; i < this.recurringDates.size(); i++) {
+      if (this.recurringDates.get(i).compare(new Date(dateTime[0])) == 0) {
+        eventIndex = i;
+      }
+    }
     if (prop.equals("subject")) {
       // remove from series
       return this.copy(newPropvalue, this.startDate, this.endDate, this.times, this.location,

@@ -50,15 +50,14 @@ public abstract class AbstractEvent implements IEvent {
    * Creates a copy of this event.
    * 
    * @param subject String
-   * @param startDate Date
-   * @param endDate Date
-   * @param times int[4] 
+   * @param startDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime "YYYY-MM-DDThh:mm"
    * @param location String
    * @param description String
    * @param status String
    * @return IEvent
    */
-  protected abstract IEvent copy(String subject, Date startDate, Date endDate, int[] times,
+  protected abstract IEvent copy(String subject, Date startDateTtime, Date endDateTtime,
                           String location, String description, String status);
 
   /**
@@ -107,7 +106,7 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
-  public IEvent editEventProperty(String prop, String newPropvalue) {
+  public IEvent editEventProperty(String prop, String dateTtime, String newPropvalue) {
     switch (prop) {
       case "subject":
         this.subject = newPropvalue;
@@ -128,18 +127,18 @@ public abstract class AbstractEvent implements IEvent {
         this.status = newPropvalue;
         break;
     }
-    return copy(this.subject, startDate, endDate, this.times, this.location,
+    return copy(this.subject, this.getDateTtime(true), this.getDateTtime(false), this.location,
             this.description, this.status);
   }
 
   @Override
   public IEvent editEventsProperty(String prop, String dateTtime, String newPropvalue) {
-    return editEventProperty(prop, newPropvalue);
+    return editEventProperty(prop, dateTtime, newPropvalue);
   }
 
   @Override
   public IEvent editSeriesProperty(String prop, String newPropvalue) {
-    return editEventProperty(prop, newPropvalue);
+    return editEventProperty(prop, "", newPropvalue);
   }
 
   @Override

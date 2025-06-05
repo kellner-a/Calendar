@@ -30,10 +30,11 @@ public interface IEvent {
    * Updates the property of the event with the new property value.
    *
    * @param prop         String
+   * @param dateTtime "YYYY-MM-DDThh:mm"
    * @param newPropvalue String
    * @return IEvent
    */
-  public IEvent editEventProperty(String prop, String newPropvalue);
+  public IEvent editEventProperty(String prop, String dateTtime, String newPropvalue);
 
   /**
    * Updates the property of events following the given dateTtime if this event is a series. If
@@ -50,7 +51,6 @@ public interface IEvent {
    * this method operates the same as editProperty.
    *
    * @param prop String
-   * @param dateTtime "YYYY-MM-DDThh:mm"
    * @param newPropvalue String
    */
   public IEvent editSeriesProperty(String prop, String newPropvalue);

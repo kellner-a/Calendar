@@ -180,7 +180,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(endDateTtime);
     validateProperty(prop);
     IEvent eventToEdit = findEvent(eventSubject, startDateTtime, endDateTtime);
-    eventToEdit = eventToEdit.editEventProperty(prop, newPropvalue);
+    eventToEdit = eventToEdit.editEventProperty(prop,startDateTtime, newPropvalue);
   }
 
   @Override
