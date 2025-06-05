@@ -14,8 +14,7 @@ public class SingleEvent extends AbstractEvent {
   }
 
   @Override
-  protected IEvent copy(String subject, Date startDate, Date endDate, int[] times, String location,
-                        String description, String status) {
+  protected IEvent copy(String subject, Date startDateTtime, Date endDateTtime, String location, String description, String status) {
     return null;
   }
 
