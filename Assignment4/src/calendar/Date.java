@@ -9,7 +9,7 @@ public class Date implements IDate {
   protected int year;
   protected int month;
   protected int day;
-  protected char dayOfWeek;
+  char dayOfWeek;
 
   public Date(String dateString) {
     String[] strings = dateString.split("-");
@@ -52,6 +52,11 @@ public class Date implements IDate {
   }
 
   @Override
+  public char getDayOfWeek() {
+    return this.dayOfWeek;
+  }
+
+  @Override
   public int compare(IDate otherDate) {
     if (this.year > otherDate.getYear()) {
       return 1;
@@ -71,7 +76,7 @@ public class Date implements IDate {
   }
 
   @Override
-  public IDate getNextDate(int days) {
+  public Date getNextDate(int days) {
     int nextday = this.day;
     int nextmonth = this.month;
     int nextyear = this.year;

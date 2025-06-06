@@ -87,7 +87,7 @@ public class SeriesEvent extends AbstractEvent {
   private void reccuringDates() {
     ArrayList<String> week = new ArrayList<String>(Arrays.asList("M", "T", "W", "R", "F", "S", "U"));
     String[] daysThatRecur = this.weekdays.split("(?!^)");
-    IDate result = super.startDate;
+    Date result = this.startDate;
     int k = 0;
 
     if (this.timesRepeated > 0) {
@@ -113,14 +113,14 @@ public class SeriesEvent extends AbstractEvent {
         if (week.indexOf(daysThatRecur[k]) < week.indexOf(result.dayOfWeek)) {
           // does nothing because the day that the event should occur is before the startdate
         }
-        else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[j])) {
+        else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[k])) {
           this.recurringDates.add(result);
         } else if (week.indexOf(daysThatRecur[k]) > week.indexOf(result.dayOfWeek)) {
           result = result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek));
           this.recurringDates.add(result);
         }
+        k++;
       }
-      k++;
     }
 
 

@@ -51,4 +51,12 @@ public interface IDate {
    */
   public String toString();
 
+  /**
+   * Returns a character that represents the day of the week of this date.
+   * M-Monday, T-Tuesday, W-Wednesday, R-Thursday, F-Friday, S-Saturday, U-Sunday.
+   * @return character
+   */
+
+  public char getDayOfWeek();
+
 }

@@ -97,16 +97,16 @@ public class Calendar implements ICalendar {
    * Returns the event matching the subject, startDateTtime, and endDateTtime. Throws an error if
    * no such event exists.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime dateTtime
-   * @param endDateTtime dateTtime
+   * @param endDateTtime   dateTtime
    * @return IEvent, Single or Series
    * @throws IllegalArgumentException when no event matches the given input
    */
   private IEvent findEvent(String subject, String startDateTtime, String endDateTtime)
-          throws IllegalArgumentException{
+          throws IllegalArgumentException {
     IEvent temp = null;
-    for (IEvent event: this.events) {
+    for (IEvent event : this.events) {
       if (event.match(subject, startDateTtime, endDateTtime)) {
         temp = event;
         break;
@@ -180,7 +180,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(endDateTtime);
     validateProperty(prop);
     IEvent eventToEdit = findEvent(eventSubject, startDateTtime, endDateTtime);
-    eventToEdit = eventToEdit.editEventProperty(prop,startDateTtime, newPropvalue);
+    eventToEdit = eventToEdit.editEventProperty(prop, startDateTtime, newPropvalue);
   }
 
   @Override
