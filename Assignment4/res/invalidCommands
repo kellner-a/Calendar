@@ -1,0 +1,33 @@
+List of invalid commands:
+
+create event <eventSubject withSpace from <dateStringTtimeString> to <dateStringTtimeString>
+
+create event <eventSubject> from <dateStringTtimeString>  <dateStringTtimeString> repeats <weekdays> for <N> times
+
+create event <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> repeats  until <dateString>
+
+create event <eventSubject>
+
+create event <eventSubject> repeats <weekdays> for <N> times
+
+create event <eventSubject> on <dateString> repeats <weekdays>
+
+edit event <property> from <dateStringTtimeString> to <dateStringTtimeString>
+
+edit events <property> <eventSubject> from <dateStringTtimeString> with <NewPropertyValue>
+
+edit series <property> <eventSubject> <NewPropertyValue>
+
+print events
+
+print events from <dateStringTtimeString>
+
+show status
+
+asdfad
+
+edit event
+
+print
+
+show
