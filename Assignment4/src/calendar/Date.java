@@ -9,7 +9,7 @@ public class Date implements IDate {
   protected int year;
   protected int month;
   protected int day;
-  char dayOfWeek;
+  String dayOfWeek;
 
   public Date(String dateString) {
     String[] strings = dateString.split("-");
@@ -52,7 +52,7 @@ public class Date implements IDate {
   }
 
   @Override
-  public char getDayOfWeek() {
+  public String getDayOfWeek() {
     return this.dayOfWeek;
   }
 
@@ -158,7 +158,12 @@ public class Date implements IDate {
             || (this.year % 400 == 0 && this.year % 100 == 0));
   }
 
-  private char findDayOfWeek() {
+  /**
+   * Finds what day of the week a given date is on.
+   * @return String
+   */
+
+  private String findDayOfWeek() {
     int q = this.day;
     int m = this.month;
     int year = this.year;
@@ -171,7 +176,16 @@ public class Date implements IDate {
 
     int h = (q + (13 * (m + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
 
-    char[] daysOfWeek = new char[]{'S', 'U', 'M', 'T', 'W', 'R', 'F'};
+    String [] daysOfWeek = new String[]{"S", "U", "M", "T", "W", "R", "F"};
     return daysOfWeek[h];
+  }
+
+  /**
+   * Creates a copy of this date.
+   * @return Date
+   */
+
+  protected Date copy() {
+    return new Date(this.year, this.month, this.day);
   }
 }

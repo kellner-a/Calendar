@@ -19,11 +19,11 @@ public class SeriesEvent extends AbstractEvent {
   /**
    * Constructs an event that repeats on given weekdays a given number of times.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
-   * @param weekdays MTWRFSU
-   * @param timesRepeated non-zero positive integer
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
+   * @param weekdays       MTWRFSU
+   * @param timesRepeated  non-zero positive integer
    */
   public SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays,
                      int timesRepeated) {
@@ -74,10 +74,10 @@ public class SeriesEvent extends AbstractEvent {
   /**
    * Constructs an all day event that repeats on given weekdays until a given stop date.
    *
-   * @param subject String
+   * @param subject   String
    * @param startDate "YYYY-MM-DD"
-   * @param weekdays MTWRFSU
-   * @param stopDate "YYYY-MM-DD"
+   * @param weekdays  MTWRFSU
+   * @param stopDate  "YYYY-MM-DD"
    */
   public SeriesEvent(String subject, String startDate, String weekdays, String stopDate) {
     super(subject, startDate);
@@ -91,15 +91,15 @@ public class SeriesEvent extends AbstractEvent {
   /**
    * Constructs a new Series Event.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
-   * @param weekdays MTWRFSU
-   * @param timesRepeated integer
-   * @param stopDate Date
-   * @param location String
-   * @param description String
-   * @param status String
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
+   * @param weekdays       MTWRFSU
+   * @param timesRepeated  integer
+   * @param stopDate       Date
+   * @param location       String
+   * @param description    String
+   * @param status         String
    * @param recurringDates ArrayList of Dates
    */
   private SeriesEvent(String subject, String startDateTtime, String endDateTtime, String weekdays,
@@ -115,48 +115,38 @@ public class SeriesEvent extends AbstractEvent {
     this.status = status;
   }
 
+  /**
+   * Adds the all the days that a series event occurs into a list.
+   */
+
   private void recurringDates() {
     this.recurringDates = new ArrayList<IDate>();
-    ArrayList<String> week = new ArrayList<String>(Arrays.asList("M", "T", "W", "R", "F", "S", "U"));
     String[] daysThatRecur = this.weekdays.split("(?!^)");
-    Date result = this.startDate;
-    int k = 0;
+    Date current = this.startDate.copy();
 
     if (this.timesRepeated > 0) {
-      for (int i = 0; i < this.timesRepeated; i++) {
+      int weeksAdded = 0;
+      while (weeksAdded < this.timesRepeated) {
+        for (int i = 0; i < 7; i++) {
+          for (int j = 0; j < daysThatRecur.length; j++) {
+            if (current.dayOfWeek.equals(daysThatRecur[j])) {
+              this.recurringDates.add(current.copy());
+            }
+          }
+          current = current.getNextDate(1);
+        }
+        weeksAdded++;
+      }
+    } else {
+      while (current.compare(this.stopDate) <= 0) {
         for (int j = 0; j < daysThatRecur.length; j++) {
-          if (week.indexOf(daysThatRecur[j]) < week.indexOf(result.dayOfWeek)) {
-            // does nothing because the day that the event should occur is before the startdate
-          }
-          else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[j])) {
-            this.recurringDates.add(result);
-          } else if (week.indexOf(daysThatRecur[j]) > week.indexOf(result.dayOfWeek)) {
-            result = result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek));
-            this.recurringDates.add(result);
+          if (current.dayOfWeek.equals(daysThatRecur[j])) {
+            this.recurringDates.add(current.copy());
           }
         }
+        current = current.getNextDate(1);
       }
     }
-    else {
-      while(result.compare(this.stopDate) <= 0) {
-        if(k == daysThatRecur.length) {
-          k = 0;
-        }
-        if (week.indexOf(daysThatRecur[k]) < week.indexOf(result.dayOfWeek)) {
-          // does nothing because the day that the event should occur is before the startdate
-        }
-        else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[k])) {
-          this.recurringDates.add(result);
-        } else if (week.indexOf(daysThatRecur[k]) > week.indexOf(result.dayOfWeek)) {
-          result =
-                  result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek) );
-          this.recurringDates.add(result);
-        }
-        k++;
-      }
-    }
-
-
   }
 
   /**
@@ -168,11 +158,11 @@ public class SeriesEvent extends AbstractEvent {
    */
   private String getDateTtime(int eventIndex, boolean isStart) {
     if (isStart) {
-      return this.recurringDates.get(eventIndex).toString() + "T" +  String.format("%02d",
-              this.times[0]) +":"+ String.format("%02d", this.times[1]);
+      return this.recurringDates.get(eventIndex).toString() + "T" + String.format("%02d",
+              this.times[0]) + ":" + String.format("%02d", this.times[1]);
     } else {
-      return this.recurringDates.get(eventIndex).toString() +  "T" + String.format("%02d",
-              this.times[2]) +":"+ String.format("%02d", this.times[3]);
+      return this.recurringDates.get(eventIndex).toString() + "T" + String.format("%02d",
+              this.times[2]) + ":" + String.format("%02d", this.times[3]);
     }
   }
 
@@ -381,13 +371,17 @@ public class SeriesEvent extends AbstractEvent {
     return true;
   }
 
+  /**
+   * Turns a list of all dates that a series event occurs on into a string.
+   * @return String
+   */
+
   public String recurringDatesAsString() {
     String result = "";
-    for(int i = 0; i < this.recurringDates.size(); i++) {
-      if(i == this.recurringDates.size() - 1) {
+    for (int i = 0; i < this.recurringDates.size(); i++) {
+      if (i == this.recurringDates.size() - 1) {
         result += this.recurringDates.get(i).toString();
-      }
-      else {
+      } else {
         result += this.recurringDates.get(i).toString() + ", ";
       }
     }

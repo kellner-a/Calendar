@@ -18,9 +18,9 @@ public interface IEvent {
   /**
    * Returns true if this event matches the given subject, startDateTtime, and endDateTtime.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
    * @return boolean
    */
   public boolean match(String subject, String startDateTtime, String endDateTtime);
@@ -29,7 +29,7 @@ public interface IEvent {
    * Updates the property of the event with the new property value.
    *
    * @param prop         String
-   * @param dateTtime "YYYY-MM-DDThh:mm"
+   * @param dateTtime    "YYYY-MM-DDThh:mm"
    * @param newPropvalue String
    * @return IEvent
    */
@@ -39,8 +39,8 @@ public interface IEvent {
    * Updates the property of events following the given dateTtime if this event is a series. If
    * this event is not a series, this method operates the same as editProperty.
    *
-   * @param prop String
-   * @param dateTtime "YYYY-MM-DDThh:mm"
+   * @param prop         String
+   * @param dateTtime    "YYYY-MM-DDThh:mm"
    * @param newPropvalue String
    */
   public IEvent editEventsProperty(String prop, String dateTtime, String newPropvalue);
@@ -49,7 +49,7 @@ public interface IEvent {
    * Updates the property of all events if this event is a series. If this event is not a series,
    * this method operates the same as editProperty.
    *
-   * @param prop String
+   * @param prop         String
    * @param newPropvalue String
    */
   public IEvent editSeriesProperty(String prop, String newPropvalue);
@@ -77,4 +77,65 @@ public interface IEvent {
   @Override
   public String toString();
 
+  /**
+   * Returns the start date of an event.
+   *
+   * @return Date
+   */
+
+  public Date getStartDate();
+
+  /**
+   * Returns the end date of an event.
+   *
+   * @return Date
+   */
+
+  public Date getEndDate();
+
+  /**
+   * Returns the location of an event.
+   *
+   * @return String
+   */
+
+  public String getLocation();
+
+  /**
+   * Returns the subject of an event.
+   *
+   * @return String
+   */
+
+  public String getSubject();
+
+  /**
+   * Returns the description of an event.
+   *
+   * @return String
+   */
+
+  public String getDescription();
+
+  /**
+   * Returns the status of an event.
+   *
+   * @return String
+   */
+
+  public String getStatus();
+
+  /**
+   * Returns the start time of an event
+   * @return String HH:MM
+   */
+
+  public String getStartTime();
+
+  /**
+   * Returns the end time  of an event
+   * @return String HH:MM
+   */
+
+  public String getEndTime();
 }

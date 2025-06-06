@@ -80,8 +80,8 @@ public abstract class AbstractEvent implements IEvent {
       String[] endString = dateTtime.split("T");
       String[] endTimeString = endString[1].split(":");
       this.endDate = new Date(endString[0]);
-      this.times[0] = Integer.parseInt(endTimeString[0]);
-      this.times[1] = Integer.parseInt(endTimeString[1]);
+      this.times[2] = Integer.parseInt(endTimeString[0]);
+      this.times[3] = Integer.parseInt(endTimeString[1]);
     }
   }
 
@@ -182,4 +182,47 @@ public abstract class AbstractEvent implements IEvent {
     }
     return event +" @ "+ this.location;
   }
+
+  @Override
+  public Date getStartDate() {
+    return this.startDate;
+  }
+
+  @Override
+  public Date getEndDate() {
+    return this.endDate;
+  }
+
+  @Override
+  public String getLocation() {
+    return this.location;
+  }
+
+  @Override
+  public String getSubject() {
+    return this.subject;
+  }
+
+  @Override
+  public String getDescription() {
+    return this.description;
+  }
+
+  @Override
+  public String getStatus() {
+    return this.status;
+  }
+
+  @Override
+  public String getStartTime() {
+    return String.format("%02d",this.times[0]) +":"+ String.format("%02d",
+            this.times[1]);
+  }
+
+  @Override
+  public String getEndTime() {
+    return String.format("%02d",this.times[2]) +":"+ String.format("%02d",
+            this.times[3]);
+  }
+
 }

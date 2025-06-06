@@ -57,6 +57,6 @@ public interface IDate {
    * @return character
    */
 
-  public char getDayOfWeek();
+  public String getDayOfWeek();
 
 }
