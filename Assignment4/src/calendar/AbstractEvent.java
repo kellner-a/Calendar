@@ -78,7 +78,7 @@ public abstract class AbstractEvent implements IEvent {
       this.times[1] = Integer.parseInt(startTimeString[1]);
     } else {
       String[] endString = dateTtime.split("T");
-      String[] endTimeString = endString[1].split(";");
+      String[] endTimeString = endString[1].split(":");
       this.endDate = new Date(endString[0]);
       this.times[0] = Integer.parseInt(endTimeString[0]);
       this.times[1] = Integer.parseInt(endTimeString[1]);
@@ -161,10 +161,12 @@ public abstract class AbstractEvent implements IEvent {
     time[1] = Integer.parseInt(timeString[1]);
     IDate date = new Date(dateTime[0]);
     if (date.compare(this.startDate) == 0 && date.compare(this.endDate) == 0) {
-      return this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
-              && time[1] <= this.times[3];
+      if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
+              && time[1] <= this.times[3]) {
+        return true;
+      }
     }
-    return date.compare(startDate) >= 0 && date.compare(endDate) <= 0;
+    return date.compare(this.startDate) >= 0 && date.compare(this.endDate) <= 0;
   }
 
   @Override

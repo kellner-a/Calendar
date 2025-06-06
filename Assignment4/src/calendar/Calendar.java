@@ -57,7 +57,7 @@ public class Calendar implements ICalendar {
   /**
    * Throws an exception if dateTtime is formatted incorrectly.
    *
-   * @param dateTtime
+   * @param dateTtime String
    * @throws IllegalArgumentException if not "YYYY-M(M)-D(D)Th(h):m(m)"
    */
   private void validateDateTtime(String dateTtime) throws IllegalArgumentException {
@@ -83,7 +83,7 @@ public class Calendar implements ICalendar {
    * Throws an error if property is not "subject", start", "end", "description", "location",
    * "status".
    *
-   * @param prop
+   * @param prop String
    */
   private void validateProperty(String prop) throws IllegalArgumentException {
     if (!prop.equals("subject") && !prop.equals("start") && !prop.equals("end") && !prop.equals(
@@ -209,7 +209,7 @@ public class Calendar implements ICalendar {
     for (IEvent event : this.events) {
       temp = event.sameDay(day);
       if (temp != null) {
-        events.add(event);
+        events.add(temp);
       }
     }
     return events;
@@ -220,18 +220,20 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     ArrayList<IEvent> events = new ArrayList<>();
-    IDate start = new Date(startDateTtime);
-    IDate end = new Date(endDateTtime);
+    String[] dateTime = startDateTtime.split("T");
+    IDate start = new Date(dateTime[0]);
+    dateTime = startDateTtime.split("T");
+    IDate end = new Date(dateTime[0]);
 
     IEvent temp;
-    for (IEvent event : this.events) {
-      temp = event.sameDay(start);
-      if (temp != null) {
-        events.add(event);
+    while (start.compare(end) <= 0) {
+      for (IEvent event : this.events) {
+        temp = event.sameDay(start);
+        if (temp != null) {
+          events.add(temp);
+        }
       }
-      if (start.compare(end) == 0) {
-        break;
-      }
+      start = start.getNextDate(1);
     }
     return events;
   }
@@ -239,8 +241,12 @@ public class Calendar implements ICalendar {
   @Override
   public boolean showStatus(String dateTtime) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
-    //find event --> isBusy()
-
+    IEvent temp;
+    for (IEvent event: this.events) {
+      if (event.isBusy(dateTtime)) {
+        return true;
+      }
+    }
     return false;
   }
 }

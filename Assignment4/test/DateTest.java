@@ -9,12 +9,18 @@ public class DateTest {
 
   @Test
   public void testDate() {
-    testDate = new Date("2025-06-05T08:08");
+    testDate = new Date("2025-06-05");
 
     assertEquals(2025, testDate.getYear());
     assertEquals(6, testDate.getMonth());
     assertEquals(5, testDate.getDay());
     assertEquals('R', testDate.getDayOfWeek());
 
+    testDate = new Date("2023-05-04");
+
+    assertEquals(2023, testDate.getYear());
+    assertEquals(5, testDate.getMonth());
+    assertEquals(4, testDate.getDay());
+    assertEquals('R', testDate.getDayOfWeek());
   }
 }

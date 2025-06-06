@@ -32,6 +32,7 @@ public class SeriesEvent extends AbstractEvent {
     this.timesRepeated = timesRepeated;
     this.stopDate = null;
     super.initializeOtherProperties();
+    this.recurringDates();
   }
 
   /**
@@ -50,6 +51,7 @@ public class SeriesEvent extends AbstractEvent {
     this.timesRepeated = -1;
     this.stopDate = new Date(stopDate);
     super.initializeOtherProperties();
+    this.recurringDates();
   }
 
   /**
@@ -66,6 +68,7 @@ public class SeriesEvent extends AbstractEvent {
     this.timesRepeated = timesRepeated;
     this.stopDate = null;
     super.initializeOtherProperties();
+    this.recurringDates();
   }
 
   /**
@@ -82,6 +85,7 @@ public class SeriesEvent extends AbstractEvent {
     this.timesRepeated = -1;
     this.stopDate = new Date(startDate);
     super.initializeOtherProperties();
+    this.recurringDates();
   }
 
   /**
@@ -111,10 +115,11 @@ public class SeriesEvent extends AbstractEvent {
     this.status = status;
   }
 
-  private void reccuringDates() {
+  private void recurringDates() {
+    this.recurringDates = new ArrayList<IDate>();
     ArrayList<String> week = new ArrayList<String>(Arrays.asList("M", "T", "W", "R", "F", "S", "U"));
     String[] daysThatRecur = this.weekdays.split("(?!^)");
-    IDate result = this.startDate;
+    Date result = this.startDate;
     int k = 0;
 
     if (this.timesRepeated > 0) {
@@ -140,14 +145,15 @@ public class SeriesEvent extends AbstractEvent {
         if (week.indexOf(daysThatRecur[k]) < week.indexOf(result.dayOfWeek)) {
           // does nothing because the day that the event should occur is before the startdate
         }
-        else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[j])) {
+        else if (week.indexOf(result.dayOfWeek) == week.indexOf(daysThatRecur[k])) {
           this.recurringDates.add(result);
         } else if (week.indexOf(daysThatRecur[k]) > week.indexOf(result.dayOfWeek)) {
-          result = result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek));
+          result =
+                  result.getNextDate(week.indexOf(daysThatRecur[0]) - week.indexOf(result.dayOfWeek) );
           this.recurringDates.add(result);
         }
+        k++;
       }
-      k++;
     }
 
 
@@ -345,9 +351,47 @@ public class SeriesEvent extends AbstractEvent {
             this.recurringDates);
   }
 
+
+  @Override
+  public boolean isBusy(String dateTtime) {
+    String[] dateTime = dateTtime.split("T");
+    String[] timeString = dateTime[1].split(":");
+    int[] time = new int[2];
+    time[0] = Integer.parseInt(timeString[0]);
+    time[1] = Integer.parseInt(timeString[1]);
+    IDate date = new Date(dateTime[0]);
+    for (int i = 0; i < this.recurringDates.size(); i++) {
+      if (date.compare(this.recurringDates.get(i)) == 0
+              && date.compare(this.recurringDates.get(i)) == 0) {
+        if (this.times[0] <= time[0] && time[0] <= this.times[2] && this.times[1] <= time[1]
+                && time[1] <= this.times[3]) {
+          return true;
+        }
+      }
+      if (date.compare(this.recurringDates.get(i)) >= 0
+              && date.compare(this.recurringDates.get(i)) <= 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public boolean isSeries() {
     return true;
+  }
+
+  public String recurringDatesAsString() {
+    String result = "";
+    for(int i = 0; i < this.recurringDates.size(); i++) {
+      if(i == this.recurringDates.size() - 1) {
+        result += this.recurringDates.get(i).toString();
+      }
+      else {
+        result += this.recurringDates.get(i).toString() + ", ";
+      }
+    }
+    return result;
   }
 
 }
