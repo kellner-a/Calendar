@@ -8,6 +8,14 @@ package calendar;
 public interface IEvent {
 
   /**
+   * Returns a copy of this event if this event is during the given date. Returns null otherwise.
+   *
+   * @param date Date
+   * @return IEvent or null
+   */
+  public IEvent sameDay(IDate date);
+
+  /**
    * Returns true if this event matches the given subject, startDateTtime, and endDateTtime.
    *
    * @param subject String
@@ -16,15 +24,6 @@ public interface IEvent {
    * @return boolean
    */
   public boolean match(String subject, String startDateTtime, String endDateTtime);
-
-  /**
-   * Returns true if this event matches the given subject and startDateTtime.
-   *
-   * @param subject String
-   * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @return boolean
-   */
-  public boolean match(String subject, String startDateTtime);
 
   /**
    * Updates the property of the event with the new property value.

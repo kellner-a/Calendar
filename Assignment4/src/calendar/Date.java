@@ -13,9 +13,9 @@ public class Date implements IDate {
 
   public Date(String dateString) {
     String[] strings = dateString.split("-");
-    this.year = Integer.valueOf(strings[0]);
-    this.month = Integer.valueOf(strings[1]);
-    this.day = Integer.valueOf(strings[2]);
+    this.year = Integer.parseInt(strings[0]);
+    this.month = Integer.parseInt(strings[1]);
+    this.day = Integer.parseInt(strings[2]);
     this.dayOfWeek = findDayOfWeek();
 
     boolean valid = verify();

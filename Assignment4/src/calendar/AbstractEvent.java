@@ -57,8 +57,10 @@ public abstract class AbstractEvent implements IEvent {
    * @param status String
    * @return IEvent
    */
-  protected abstract IEvent copy(String subject, Date startDateTtime, Date endDateTtime,
-                          String location, String description, String status);
+  protected IEvent copy(String subject, String startDateTtime, String endDateTtime,
+                          String location, String description, String status) {
+    return new SingleEvent(subject, startDateTtime, endDateTtime, location, description, status);
+  }
 
   /**
    * Parses the given dateTtime and initializes the startDateTtime or endDateTtime based on the
@@ -97,6 +99,15 @@ public abstract class AbstractEvent implements IEvent {
       return endDate +"T"+ String.format("%02d",this.times[2]) +":"+ String.format("%02d",
               this.times[3]);
     }
+  }
+
+  @Override
+  public IEvent sameDay(IDate date) {
+    if (this.startDate.compare(date) == 0) {
+      return this.copy(this.subject, this.getDateTtime(true), this.getDateTtime(false),
+              this.location, this.description, this.status);
+    }
+    return null;
   }
 
   @Override
