@@ -25,8 +25,4 @@ public class SingleEvent extends AbstractEvent {
   public boolean isSeries() {
     return false;
   }
-
-  private Date[] weekDaysToDates(char[] weekdays) {
-
-  }
 }
