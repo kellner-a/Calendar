@@ -1,0 +1,23 @@
+create event <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString>
+
+create event <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> repeats <weekdays> for <N> times
+
+create event <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> repeats <weekdays> until <dateString>
+
+create event <eventSubject> on <dateString>
+
+create event <eventSubject> on <dateString> repeats <weekdays> for <N> times
+
+create event <eventSubject> on <dateString> repeats <weekdays> until <dateString>
+
+edit event <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> with <NewPropertyValue>
+
+edit events <property> <eventSubject> from <dateStringTtimeString> with <NewPropertyValue>
+
+edit series <property> <eventSubject> from <dateStringTtimeString> with <NewPropertyValue>
+
+print events on <dateString>
+
+print events from <dateStringTtimeString> to <dateStringTtimeString>
+
+show status on <dateStringTtimeString>
