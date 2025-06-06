@@ -223,7 +223,6 @@ public class Calendar implements ICalendar {
     IDate start = new Date(startDateTtime);
     IDate end = new Date(endDateTtime);
 
-    /*
     IEvent temp;
     for (IEvent event : this.events) {
       temp = event.sameDay(start);
@@ -235,7 +234,6 @@ public class Calendar implements ICalendar {
       }
     }
     return events;
-    */
   }
 
   @Override

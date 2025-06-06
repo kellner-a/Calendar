@@ -146,7 +146,7 @@ public interface ICalendar {
   public ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException;
 
   /**
-   * Returns a list of events planned between two date times.
+   * Returns a list of events planned between two dateTtimes.
    *
    * @param startDateTtime "YYYY-MM-DDThh:mm"
    * @param endDateTtime   "YYYY-MM-DDThh:mm"
@@ -156,7 +156,7 @@ public interface ICalendar {
   public ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime) throws IllegalArgumentException;
 
   /**
-   * Returns the true if this calendar has an event during the given dateStringTtimeString.
+   * Returns the true if this calendar has an event during the given dateTtime.
    *
    * @param dateTtime "YYYY-MM-DD"
    * @return boolean
