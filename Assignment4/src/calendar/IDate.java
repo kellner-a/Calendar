@@ -30,7 +30,7 @@ public interface IDate {
    * Compares otherDate to this date. Returns 1 when this date is after otherDate, -1 when this
    * date is before otherDate, and 0 if they are the same date.
    *
-   * @param date IDate
+   * @param otherDate IDate
    * @return -1, 0, 1
    */
   public int compare(IDate otherDate);

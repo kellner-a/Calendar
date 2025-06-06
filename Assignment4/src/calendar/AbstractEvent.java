@@ -102,6 +102,15 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
+  public IEvent sameDay(IDate date) {
+    if (this.startDate.compare(date) == 0) {
+      return this.copy(this.subject, this.getDateTtime(true), this.getDateTtime(false),
+              this.location, this.description, this.status);
+    }
+    return null;
+  }
+
+  @Override
   public boolean match(String subject, String startDateTtime, String endDateTtime) {
     return this.subject.equals(subject) && getDateTtime(true).equals(startDateTtime)
             && (getDateTtime(false).equals(endDateTtime) || endDateTtime.isEmpty());

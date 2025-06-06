@@ -22,11 +22,6 @@ public class SingleEvent extends AbstractEvent {
   }
 
   @Override
-  public boolean match(String subject, String startDateTtime) {
-    return false;
-  }
-
-  @Override
   public boolean isSeries() {
     return false;
   }

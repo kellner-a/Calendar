@@ -2,7 +2,6 @@ package calendar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -204,18 +203,39 @@ public class Calendar implements ICalendar {
   @Override
   public ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException {
     validateDate(date);
-
-
-    return null;
+    ArrayList<IEvent> events = new ArrayList<>();
+    IDate day = new Date(date);
+    IEvent temp;
+    for (IEvent event : this.events) {
+      temp = event.sameDay(day);
+      if (temp != null) {
+        events.add(event);
+      }
+    }
+    return events;
   }
 
   @Override
-  public ArrayList<IEvent> getEvents(String date1, String date2) throws IllegalArgumentException {
-    validateDate(date1);
-    validateDate(date2);
+  public ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime) throws IllegalArgumentException {
+    validateDateTtime(startDateTtime);
+    validateDateTtime(endDateTtime);
+    ArrayList<IEvent> events = new ArrayList<>();
+    IDate start = new Date(startDateTtime);
+    IDate end = new Date(endDateTtime);
 
-
-    return null;
+    /*
+    IEvent temp;
+    for (IEvent event : this.events) {
+      temp = event.sameDay(start);
+      if (temp != null) {
+        events.add(event);
+      }
+      if (start.compare(end) == 0) {
+        break;
+      }
+    }
+    return events;
+    */
   }
 
   @Override
