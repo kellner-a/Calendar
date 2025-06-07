@@ -11,6 +11,11 @@ public class Date implements IDate {
   protected int day;
   String dayOfWeek;
 
+  /**
+   * Constructs a new Date from the given "YYYY-MM-DD".
+   *
+   * @param dateString "YYYY-MM-DD"
+   */
   public Date(String dateString) {
     String[] strings = dateString.split("-");
     this.year = Integer.parseInt(strings[0]);
@@ -129,18 +134,12 @@ public class Date implements IDate {
    * @return true or false
    */
   private boolean verify() {
-    boolean bool = true;
-    if (month > 12 || month < 1 || day < 1 || year < 0) {
-      bool = false;
-    }
+    boolean bool = month <= 12 && month >= 1 && day >= 1 && year >= 0;
     if ((month == 4 || month == 6 || month == 9 || month == 11) && day >= 31) {
       bool = false;
     }
     if (month == 2 && day >= 29) {
-      bool = false;
-      if (leap() && day == 29) {
-        bool = true;
-      }
+      bool = leap() && day == 29;
     }
     if (day > 31) {
       bool = false;
@@ -160,6 +159,7 @@ public class Date implements IDate {
 
   /**
    * Finds what day of the week a given date is on.
+   *
    * @return String
    */
 
@@ -176,12 +176,13 @@ public class Date implements IDate {
 
     int h = (q + (13 * (m + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
 
-    String [] daysOfWeek = new String[]{"S", "U", "M", "T", "W", "R", "F"};
+    String[] daysOfWeek = new String[]{"S", "U", "M", "T", "W", "R", "F"};
     return daysOfWeek[h];
   }
 
   /**
    * Creates a copy of this date.
+   *
    * @return Date
    */
 

@@ -21,7 +21,7 @@ public class CalendarApp {
       throw new IllegalArgumentException("Invalid number of arguments");
     }
     ICalendar calendar = new Calendar("2025-06-06");
-    IView view = new TextView(calendar);
+    IView view = new TextView();
     IController controller = new Controller(calendar, view);
     if (args[2].equals("interactive")) {
       controller.goInteractiveCalendar();

@@ -10,5 +10,5 @@ public interface IView {
    *
    * @return String
    */
-  public String display(String message);
+  String display(String message);
 }

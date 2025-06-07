@@ -10,7 +10,7 @@ public class SingleEvent extends AbstractEvent {
   }
 
   public SingleEvent(String subject, String startDateTtime, String endDateTTIme) {
-    super(subject, startDateTtime, endDateTTIme );
+    super(subject, startDateTtime, endDateTTIme);
   }
 
   SingleEvent(String subject, String startDateTtime, String endDateTtime, String location,

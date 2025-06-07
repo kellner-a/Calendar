@@ -5,12 +5,9 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import javax.swing.text.View;
-
 import calendar.ICalendar;
 import calendar.IEvent;
 import view.IView;
-import view.TextView;
 
 /**
  * Represent a controller for a Calendar. Handles user interaction with the calendar package (our
@@ -18,8 +15,8 @@ import view.TextView;
  */
 public class Controller implements IController {
 
-  private ICalendar calendar;
-  private IView view;
+  private final ICalendar calendar;
+  private final IView view;
 
   /**
    * Constructs a new controller with the given calendar.
@@ -38,10 +35,10 @@ public class Controller implements IController {
     Scanner scanner = new Scanner(System.in);
     while (true) {
       String command = scanner.nextLine();
-      if (Pattern.matches("create event \\S+ from \\S+ to \\S+", command)){
+      if (Pattern.matches("create event \\S+ from \\S+ to \\S+", command)) {
         this.createSingleEvent(command);
-      } else if (Pattern.matches("create event \\S+ from \\S+ to \\S+ repeats \\S+ for \\d+ " +
-              "times", command)) {
+      } else if (Pattern.matches("create event \\S+ from \\S+ to \\S+ repeats \\S+ for \\d+ "
+              + "times", command)) {
         this.createEventSeriesTimesRepeated(command);
       } else if (Pattern.matches("create event \\S+ from \\S+ to \\S+ repeats \\S+ until \\S+",
               command)) {
@@ -53,7 +50,7 @@ public class Controller implements IController {
         this.createEventSeriesAllDayTimesRepeated(command);
       } else if (Pattern.matches("create event \\S+ on \\S+ repeats \\S+ until \\S+", command)) {
         this.createEventSeriesAllDayStopDate(command);
-      } else if (Pattern.matches("edit event \\S+ \\S+ from \\S+ to \\S+ with \\S+",  command)) {
+      } else if (Pattern.matches("edit event \\S+ \\S+ from \\S+ to \\S+ with \\S+", command)) {
         this.editEventProperty(command);
       } else if (Pattern.matches("edit events \\S+ \\S+ from \\S+ with \\S+", command)) {
         this.editEventsProperty(command);
@@ -87,9 +84,8 @@ public class Controller implements IController {
    * Creates a single event.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  private void createSingleEvent(String command) throws IllegalArgumentException {
+  private void createSingleEvent(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.createSingleEvent(input[2], input[4], input[6]);
@@ -102,12 +98,11 @@ public class Controller implements IController {
    * Creates an event series.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  private void createEventSeriesTimesRepeated(String command) throws IllegalArgumentException {
+  private void createEventSeriesTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createEventSeries(input[2], input[4], input[6], input[8],
+      this.calendar.createEventSeriesStopDate(input[2], input[4], input[6], input[8],
               Integer.parseInt(input[10]));
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
@@ -117,13 +112,12 @@ public class Controller implements IController {
   /**
    * Creates an event series.
    *
-   * @param command
-   * @throws IllegalArgumentException
+   * @param command String
    */
-  private void createEventSeriesStopDate(String command) throws IllegalArgumentException {
+  private void createEventSeriesStopDate(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createEventSeries(input[2], input[4], input[6], input[8], input[10]);
+      this.calendar.createEventSeriesStopDate(input[2], input[4], input[6], input[8], input[10]);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -133,12 +127,11 @@ public class Controller implements IController {
    * Creates a single all day event.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void createSingleEventAllDay(String command) throws IllegalArgumentException {
+  public void createSingleEventAllDay(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createSingleEvent(input[2], input[4]);
+      this.calendar.createSingleAllDayEvent(input[2], input[4]);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -148,15 +141,14 @@ public class Controller implements IController {
    * Creats an event series of all day events.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void createEventSeriesAllDayTimesRepeated(String command)
-          throws IllegalArgumentException {
+  public void createEventSeriesAllDayTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createEventSeries(input[2], input[4], input[6], Integer.parseInt(input[8]));
+      this.calendar.createAllDayEventSeriesTimesRepeated(input[2], input[4], input[6],
+              Integer.parseInt(input[8]));
     } catch (IllegalArgumentException e) {
-
+      System.out.println(e.getMessage());
     }
   }
 
@@ -164,12 +156,11 @@ public class Controller implements IController {
    * Creates an event series of all day events.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void createEventSeriesAllDayStopDate(String command) throws IllegalArgumentException {
+  public void createEventSeriesAllDayStopDate(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createEventSeries(input[2], input[4], input[6], input[8]);
+      this.calendar.createAllDayEventSeriesStopDate(input[2], input[4], input[6], input[8]);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -179,9 +170,8 @@ public class Controller implements IController {
    * Edits an events property.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void editEventProperty(String command) throws IllegalArgumentException {
+  public void editEventProperty(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.editEventProperty(input[2], input[3], input[5], input[7], input[9]);
@@ -194,9 +184,8 @@ public class Controller implements IController {
    * Edits an events property.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void editEventsProperty(String command) throws IllegalArgumentException {
+  public void editEventsProperty(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.editEventsProperty(input[2], input[3], input[5], input[7]);
@@ -209,9 +198,8 @@ public class Controller implements IController {
    * Edits an events property.
    *
    * @param command String
-   * @throws IllegalArgumentException
    */
-  public void editSeriesProperty(String command) throws IllegalArgumentException {
+  public void editSeriesProperty(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.editSeriesProperty(input[2], input[3], input[5], input[7]);
@@ -225,9 +213,8 @@ public class Controller implements IController {
    *
    * @param command String
    * @return String
-   * @throws IllegalArgumentException
    */
-  private String printEventsDay(String command) throws IllegalArgumentException {
+  private String printEventsDay(String command) {
     String[] input = command.split(" ");
     String date = input[3];
     StringBuilder builder = new StringBuilder();

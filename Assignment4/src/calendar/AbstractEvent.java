@@ -21,7 +21,7 @@ public abstract class AbstractEvent implements IEvent {
   /**
    * Constructs an all day event with a subject and a start date.
    *
-   * @param subject subject of the event
+   * @param subject        subject of the event
    * @param startDateTTime the start date and start time as a string
    */
   public AbstractEvent(String subject, String startDateTTime) {
@@ -29,10 +29,17 @@ public abstract class AbstractEvent implements IEvent {
     String[] startString = startDateTTime.split("T");
     this.startDate = new Date(startString[0]); // makes a new date w the start time
     this.endDate = new Date(startString[0]);
-    this.times = new int[] {8, 0 , 17, 0};
+    this.times = new int[]{8, 0, 17, 0};
     initializeOtherProperties();
   }
 
+  /**
+   * Constructs a new event.
+   *
+   * @param subject        String
+   * @param startDateTTime "YYYY-MM-DDThh:mm"
+   * @param endDateTTime   "YYYY-MM-DDThh:mm"
+   */
   public AbstractEvent(String subject, String startDateTTime, String endDateTTime) {
     this.subject = subject;
     parseDateTtime(startDateTTime, true);
@@ -48,17 +55,17 @@ public abstract class AbstractEvent implements IEvent {
 
   /**
    * Creates a copy of this event.
-   * 
-   * @param subject String
+   *
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
-   * @param location String
-   * @param description String
-   * @param status String
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
+   * @param location       String
+   * @param description    String
+   * @param status         String
    * @return IEvent
    */
   protected IEvent copy(String subject, String startDateTtime, String endDateTtime,
-                          String location, String description, String status) {
+                        String location, String description, String status) {
     return new SingleEvent(subject, startDateTtime, endDateTtime, location, description, status);
   }
 
@@ -67,7 +74,7 @@ public abstract class AbstractEvent implements IEvent {
    * isStart value. True initializes startDateTtime, false initiliazes endDateTtime.
    *
    * @param dateTtime "YYYY-MM-DDThh:mm"
-   * @param isStart true or false
+   * @param isStart   true or false
    */
   protected void parseDateTtime(String dateTtime, boolean isStart) {
     if (isStart) {
@@ -93,10 +100,10 @@ public abstract class AbstractEvent implements IEvent {
    */
   protected String getDateTtime(boolean getStart) {
     if (getStart) {
-      return startDate +"T"+ String.format("%02d",this.times[0]) +":"+ String.format("%02d",
+      return startDate + "T" + String.format("%02d", this.times[0]) + ":" + String.format("%02d",
               this.times[1]);
     } else {
-      return endDate +"T"+ String.format("%02d",this.times[2]) +":"+ String.format("%02d",
+      return endDate + "T" + String.format("%02d", this.times[2]) + ":" + String.format("%02d",
               this.times[3]);
     }
   }
@@ -137,6 +144,8 @@ public abstract class AbstractEvent implements IEvent {
       case "status":
         this.status = newPropvalue;
         break;
+      default:
+        throw new IllegalArgumentException("Invalid property");
     }
     return copy(this.subject, this.getDateTtime(true), this.getDateTtime(false), this.location,
             this.description, this.status);
@@ -175,12 +184,12 @@ public abstract class AbstractEvent implements IEvent {
   @Override
   public String toString() {
     String event =
-            this.subject+": "+ String.valueOf(this.times[0])+":"+String.valueOf(this.times[1]) +
-                    " - "+String.valueOf(this.times[2]) +":"+String.valueOf(this.times[3]);
-    if (this.location.isEmpty()){
+            this.subject + ": " + this.times[0] + ":" + this.times[1] +
+                    " - " + this.times[2] + ":" + this.times[3];
+    if (this.location.isEmpty()) {
       return event;
     }
-    return event +" @ "+ this.location;
+    return event + " @ " + this.location;
   }
 
   @Override
@@ -215,13 +224,13 @@ public abstract class AbstractEvent implements IEvent {
 
   @Override
   public String getStartTime() {
-    return String.format("%02d",this.times[0]) +":"+ String.format("%02d",
+    return String.format("%02d", this.times[0]) + ":" + String.format("%02d",
             this.times[1]);
   }
 
   @Override
   public String getEndTime() {
-    return String.format("%02d",this.times[2]) +":"+ String.format("%02d",
+    return String.format("%02d", this.times[2]) + ":" + String.format("%02d",
             this.times[3]);
   }
 

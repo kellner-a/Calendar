@@ -1,15 +1,18 @@
 import org.junit.Test;
 
-import calendar.IDate;
 import calendar.Date;
+import calendar.IDate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Tests the date class.
+ */
 public class DateTest {
-  private IDate testDate;
 
   @Test
   public void testDate() {
-    testDate = new Date("2025-06-05");
+    IDate testDate = new Date("2025-06-05");
 
     assertEquals(2025, testDate.getYear());
     assertEquals(6, testDate.getMonth());

@@ -14,8 +14,7 @@ import java.util.regex.Pattern;
  */
 public class Calendar implements ICalendar {
 
-  private IDate currentDate;
-  private List<IEvent> events;
+  private final List<IEvent> events;
 
   /**
    * Constructor for a calendar. Takes in a dateString as the current date and initializes its
@@ -26,7 +25,6 @@ public class Calendar implements ICalendar {
    */
   public Calendar(String date) throws IllegalArgumentException {
     validateDate(date);
-    this.currentDate = new Date(date);
     this.events = new ArrayList<>();
   }
 
@@ -126,10 +124,13 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
-                                String weekdays, int timesRepeated)
+  public void createEventSeriesStopDate(String subject, String startDateTtime,
+                                        String endDateTtime, String weekdays,
+                                        int timesRepeated)
           throws IllegalArgumentException {
-    if (timesRepeated <= 0) throw new IllegalArgumentException("Invalid times to repeat");
+    if (timesRepeated <= 0) {
+      throw new IllegalArgumentException("Invalid times to repeat");
+    }
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
@@ -138,8 +139,9 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
-                                String weekdays, String stopDate) throws IllegalArgumentException {
+  public void createEventSeriesStopDate(String subject, String startDateTtime,
+                                        String endDateTtime, String weekdays, String stopDate)
+          throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
@@ -148,22 +150,27 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public void createSingleEvent(String subject, String date) throws IllegalArgumentException {
+  public void createSingleAllDayEvent(String subject, String date)
+          throws IllegalArgumentException {
     validateDate(date);
     this.events.add(new SingleEvent(subject, date));
   }
 
   @Override
-  public void createEventSeries(String subject, String startDate, String weekdays,
-                                int timesRepeated) throws IllegalArgumentException {
-    if (timesRepeated <= 0) throw new IllegalArgumentException("Invalid times to repeat");
+  public void createAllDayEventSeriesTimesRepeated(String subject, String startDate,
+                                                   String weekdays, int timesRepeated)
+          throws IllegalArgumentException {
+    if (timesRepeated <= 0) {
+      throw new IllegalArgumentException("Invalid times to repeat");
+    }
     validateDate(startDate);
     validateDate(weekdays);
     this.events.add(new SeriesEvent(subject, startDate, weekdays, timesRepeated));
   }
 
   @Override
-  public void createEventSeries(String subject, String startDate, String weekdays, String stopDate)
+  public void createAllDayEventSeriesStopDate(String subject, String startDate, String weekdays,
+                                              String stopDate)
           throws IllegalArgumentException {
     validateDate(startDate);
     validateDate(weekdays);
@@ -216,7 +223,8 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime) throws IllegalArgumentException {
+  public ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime)
+          throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     ArrayList<IEvent> events = new ArrayList<>();
@@ -242,7 +250,7 @@ public class Calendar implements ICalendar {
   public boolean showStatus(String dateTtime) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
     IEvent temp;
-    for (IEvent event: this.events) {
+    for (IEvent event : this.events) {
       if (event.isBusy(dateTtime)) {
         return true;
       }

@@ -15,76 +15,79 @@ public interface ICalendar {
   /**
    * Creates a single event in this calendar.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
    * @throws IllegalArgumentException when input doesn't match specified pattern, endDateTtime is
-   * before startDateTtime
+   *                                  before startDateTtime
    */
-  public void createSingleEvent(String subject, String startDateTtime,
-                          String endDateTtime) throws IllegalArgumentException;
+  void createSingleEvent(String subject, String startDateTtime,
+                         String endDateTtime) throws IllegalArgumentException;
 
   /**
    * Creates an event series that repeats N times on specific weekdays.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
-   * @param weekdays MTWRFSU
-   * @param timesRepeated non-zero positive integer
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
+   * @param weekdays       MTWRFSU
+   * @param timesRepeated  non-zero positive integer
    * @throws IllegalArgumentException when input doesn't match specified pattern, endDateTtime is
-   * before startDateTtime
+   *                                  before startDateTtime
    */
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
-                          String weekdays, int timesRepeated) throws IllegalArgumentException;
+  void createEventSeriesStopDate(String subject, String startDateTtime, String endDateTtime,
+                                 String weekdays, int timesRepeated)
+          throws IllegalArgumentException;
 
   /**
    * Creates an event series that repeats on specific weekdays until the given stopDate.
    *
-   * @param subject String
+   * @param subject        String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
-   * @param weekdays MTWRFSU
-   * @param stopDate "YYYY-MM-DD"
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
+   * @param weekdays       MTWRFSU
+   * @param stopDate       "YYYY-MM-DD"
    * @throws IllegalArgumentException when input doesn't match specified pattern, endDateTtime is
-   * before startDateTtime, stopDate is before startDateTtime
+   *                                  before startDateTtime, stopDate is before startDateTtime
    */
-  public void createEventSeries(String subject, String startDateTtime, String endDateTtime,
-                          String weekdays, String stopDate) throws IllegalArgumentException;
+  void createEventSeriesStopDate(String subject, String startDateTtime, String endDateTtime,
+                                 String weekdays, String stopDate)
+          throws IllegalArgumentException;
 
   /**
    * Creates a single all day event.
    *
    * @param subject String
-   * @param date "YYYY-MM-DD"
+   * @param date    "YYYY-MM-DD"
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
-  public void createSingleEvent(String subject, String date) throws IllegalArgumentException;
+  void createSingleAllDayEvent(String subject, String date) throws IllegalArgumentException;
 
   /**
    * Creates an event series of all day events that repeat N times on specific weekdays.
    *
-   * @param subject String
-   * @param startDate "YYYY-MM-DD"
-   * @param weekdays MTWRFSU
+   * @param subject       String
+   * @param startDate     "YYYY-MM-DD"
+   * @param weekdays      MTWRFSU
    * @param timesRepeated non-zero positive integer
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
-  public void createEventSeries(String subject, String startDate, String weekdays,
-                               int timesRepeated) throws IllegalArgumentException;
+  void createAllDayEventSeriesTimesRepeated(String subject, String startDate, String weekdays,
+                                            int timesRepeated) throws IllegalArgumentException;
 
   /**
    * Creates an event series of all day events that repeat on specific weekdays until the given
    * stopDate.
    *
-   * @param subject String
+   * @param subject   String
    * @param startDate "YYYY-MM-DD"
-   * @param weekdays MTWRFSU
-   * @param stopDate "YYYY-MM-DD"
+   * @param weekdays  MTWRFSU
+   * @param stopDate  "YYYY-MM-DD"
    * @throws IllegalArgumentException when input doesn't match specified pattern, stopDate is
-   * before startDate
+   *                                  before startDate
    */
-  public void createEventSeries(String subject, String startDate, String weekdays, String stopDate)
+  void createAllDayEventSeriesStopDate(String subject, String startDate, String weekdays,
+                                       String stopDate)
           throws IllegalArgumentException;
 
 
@@ -92,16 +95,16 @@ public interface ICalendar {
    * Updates the property of the event matching the given subject and dateTtimes with the new
    * property value.
    *
-   * @param prop "subject", start", "end", "description", "location", or "status"
-   * @param eventSubject               String
+   * @param prop           "subject", start", "end", "description", "location", or "status"
+   * @param eventSubject   String
    * @param startDateTtime "YYYY-MM-DDThh:mm"
    * @param endDateTtime   "YYYY-MM-DDThh:mm"
-   * @param newPropvalue               String
+   * @param newPropvalue   String
    * @throws IllegalArgumentException when input doesn't match specified pattern, startDateTtime
-   * is before endDateTtime, the event doesn't exist
+   *                                  is before endDateTtime, the event doesn't exist
    */
-  public void editEventProperty(String prop, String eventSubject, String startDateTtime,
-                             String endDateTtime, String newPropvalue) throws IllegalArgumentException;
+  void editEventProperty(String prop, String eventSubject, String startDateTtime,
+                         String endDateTtime, String newPropvalue) throws IllegalArgumentException;
 
   /**
    * Updates the property of the event matching the given subject and dateTtime with the new
@@ -109,30 +112,30 @@ public interface ICalendar {
    * series starting at or after the given dateTtime will be updated; otherwise, this method
    * works the same as editEventProperty.
    *
-   * @param prop "subject", start", "end", "description", "location", or "status"
-   * @param eventSubject          String
-   * @param dateTtime "YYYY-MM-DDThh:mm"
-   * @param newPropvalue          String
+   * @param prop         "subject", start", "end", "description", "location", or "status"
+   * @param eventSubject String
+   * @param dateTtime    "YYYY-MM-DDThh:mm"
+   * @param newPropvalue String
    * @throws IllegalArgumentException when input doesn't match specified pattern, startDateTtime is
-   * before endDateTtime, the event doesn't exist
+   *                                  before endDateTtime, the event doesn't exist
    */
-  public void editEventsProperty(String prop, String eventSubject, String dateTtime,
-                             String newPropvalue) throws IllegalArgumentException;
+  void editEventsProperty(String prop, String eventSubject, String dateTtime,
+                          String newPropvalue) throws IllegalArgumentException;
 
   /**
    * Updates the property of the event matching the given subject and dateTtime with the new
    * property value. The properties of all events in the given series starting at or after the
    * given dateTtime will be updated; otherwise, this method works the same as editEventProperty.
    *
-   * @param prop "subject", start", "end", "description", "location", or "status"
-   * @param eventSubject          String
-   * @param dateTtime "YYYY-MM-DDThh:mm"
-   * @param newPropvalue          String
-   * @throws IllegalArgumentException when input doesn't match specified pattern, startDateTtime 
-   * is before endDateTtime, the event doesn't exist
+   * @param prop         "subject", start", "end", "description", "location", or "status"
+   * @param eventSubject String
+   * @param dateTtime    "YYYY-MM-DDThh:mm"
+   * @param newPropvalue String
+   * @throws IllegalArgumentException when input doesn't match specified pattern, startDateTtime
+   *                                  is before endDateTtime, the event doesn't exist
    */
-  public void editSeriesProperty(String prop, String eventSubject, String dateTtime,
-                                 String newPropvalue) throws IllegalArgumentException;
+  void editSeriesProperty(String prop, String eventSubject, String dateTtime,
+                          String newPropvalue) throws IllegalArgumentException;
 
 
   /**
@@ -143,7 +146,7 @@ public interface ICalendar {
    * @return a list of events
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
-  public ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException;
+  ArrayList<IEvent> getEvents(String date) throws IllegalArgumentException;
 
   /**
    * Returns a list of events planned between two dateTtimes.
@@ -153,7 +156,8 @@ public interface ICalendar {
    * @return a list of events
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
-  public ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime) throws IllegalArgumentException;
+  ArrayList<IEvent> getEvents(String startDateTtime, String endDateTtime)
+          throws IllegalArgumentException;
 
   /**
    * Returns the true if this calendar has an event during the given dateTtime.
@@ -162,5 +166,5 @@ public interface ICalendar {
    * @return boolean
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
-  public boolean showStatus(String dateTtime) throws IllegalArgumentException;
+  boolean showStatus(String dateTtime) throws IllegalArgumentException;
 }

@@ -13,7 +13,7 @@ public interface IEvent {
    * @param date Date
    * @return IEvent or null
    */
-  public IEvent sameDay(IDate date);
+  IEvent sameDay(IDate date);
 
   /**
    * Returns true if this event matches the given subject, startDateTtime, and endDateTtime.
@@ -23,7 +23,7 @@ public interface IEvent {
    * @param endDateTtime   "YYYY-MM-DDThh:mm"
    * @return boolean
    */
-  public boolean match(String subject, String startDateTtime, String endDateTtime);
+  boolean match(String subject, String startDateTtime, String endDateTtime);
 
   /**
    * Updates the property of the event with the new property value.
@@ -33,7 +33,7 @@ public interface IEvent {
    * @param newPropvalue String
    * @return IEvent
    */
-  public IEvent editEventProperty(String prop, String dateTtime, String newPropvalue);
+  IEvent editEventProperty(String prop, String dateTtime, String newPropvalue);
 
   /**
    * Updates the property of events following the given dateTtime if this event is a series. If
@@ -43,7 +43,7 @@ public interface IEvent {
    * @param dateTtime    "YYYY-MM-DDThh:mm"
    * @param newPropvalue String
    */
-  public IEvent editEventsProperty(String prop, String dateTtime, String newPropvalue);
+  IEvent editEventsProperty(String prop, String dateTtime, String newPropvalue);
 
   /**
    * Updates the property of all events if this event is a series. If this event is not a series,
@@ -52,7 +52,7 @@ public interface IEvent {
    * @param prop         String
    * @param newPropvalue String
    */
-  public IEvent editSeriesProperty(String prop, String newPropvalue);
+  IEvent editSeriesProperty(String prop, String newPropvalue);
 
   /**
    * Returns true if there is an event during the given day and time.
@@ -60,14 +60,14 @@ public interface IEvent {
    * @param dateTtime String
    * @return boolean
    */
-  public boolean isBusy(String dateTtime);
+  boolean isBusy(String dateTtime);
 
   /**
    * Returns true when the event is an event series.
    *
    * @return boolean
    */
-  public boolean isSeries();
+  boolean isSeries();
 
   /**
    * Returns a string with this events subject, start and end time, and location (if any).
@@ -75,7 +75,7 @@ public interface IEvent {
    * @return String, "subject: startTime-endTime @ location"
    */
   @Override
-  public String toString();
+  String toString();
 
   /**
    * Returns the start date of an event.
@@ -83,7 +83,7 @@ public interface IEvent {
    * @return Date
    */
 
-  public Date getStartDate();
+  Date getStartDate();
 
   /**
    * Returns the end date of an event.
@@ -91,7 +91,7 @@ public interface IEvent {
    * @return Date
    */
 
-  public Date getEndDate();
+  Date getEndDate();
 
   /**
    * Returns the location of an event.
@@ -99,7 +99,7 @@ public interface IEvent {
    * @return String
    */
 
-  public String getLocation();
+  String getLocation();
 
   /**
    * Returns the subject of an event.
@@ -107,7 +107,7 @@ public interface IEvent {
    * @return String
    */
 
-  public String getSubject();
+  String getSubject();
 
   /**
    * Returns the description of an event.
@@ -115,7 +115,7 @@ public interface IEvent {
    * @return String
    */
 
-  public String getDescription();
+  String getDescription();
 
   /**
    * Returns the status of an event.
@@ -123,19 +123,21 @@ public interface IEvent {
    * @return String
    */
 
-  public String getStatus();
+  String getStatus();
 
   /**
-   * Returns the start time of an event
+   * Returns the start time of an event.
+   *
    * @return String HH:MM
    */
 
-  public String getStartTime();
+  String getStartTime();
 
   /**
-   * Returns the end time  of an event
+   * Returns the end time  of an event.
+   *
    * @return String HH:MM
    */
 
-  public String getEndTime();
+  String getEndTime();
 }

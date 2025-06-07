@@ -1,12 +1,18 @@
 import org.junit.Test;
-import java.util.ArrayList;
-import java.util.Arrays;
-import static org.junit.Assert.*;
-import calendar.IEvent;
-import calendar.SingleEvent;
-import calendar.SeriesEvent;
-import calendar.Date;
 
+import java.util.ArrayList;
+
+import calendar.Date;
+import calendar.IEvent;
+import calendar.SeriesEvent;
+import calendar.SingleEvent;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Tests the Event class.
+ */
 public class EventTest {
   private IEvent testEvent;
   private ArrayList<Date> testList;

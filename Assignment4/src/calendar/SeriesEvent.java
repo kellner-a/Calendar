@@ -1,7 +1,6 @@
 package calendar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class represents a series of events. A series of events repeat for a specified number of
@@ -12,9 +11,9 @@ import java.util.Arrays;
 public class SeriesEvent extends AbstractEvent {
 
   private ArrayList<IDate> recurringDates;
-  private String weekdays;
-  private int timesRepeated; // -1 when unused
-  private IDate stopDate; // null when unused
+  private final String weekdays;
+  private final int timesRepeated; // -1 when unused
+  private final IDate stopDate; // null when unused
 
   /**
    * Constructs an event that repeats on given weekdays a given number of times.
@@ -334,6 +333,8 @@ public class SeriesEvent extends AbstractEvent {
       case "status":
         this.status = newPropvalue;
         break;
+      default:
+        throw new IllegalArgumentException("Invalid property");
     }
     return new SeriesEvent(this.subject, this.getDateTtime(0, true),
             this.getDateTtime(0, false), this.weekdays, this.timesRepeated,
@@ -373,6 +374,7 @@ public class SeriesEvent extends AbstractEvent {
 
   /**
    * Turns a list of all dates that a series event occurs on into a string.
+   *
    * @return String
    */
 
