@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -33,8 +35,29 @@ public class Controller implements IController {
   @Override
   public void goInteractiveCalendar() {
     Scanner scanner = new Scanner(System.in);
+    this.commandPattern(scanner);
+  }
+
+  @Override
+  public void goHeadlessCalendar(String filePath) {
+    try {
+      File commands = new File(filePath);
+      Scanner scanner = new Scanner(commands);
+      this.commandPattern(scanner);
+    } catch (FileNotFoundException e) {
+      System.out.println("File not found");
+    }
+  }
+
+  /**
+   * Effectively executes the command, given it matches one of the valid commands. Returns true
+   * when the user wants to quit, returns false otherwise.
+   *
+   * @param input Scanner
+   */
+  private void commandPattern(Scanner input) {
     while (true) {
-      String command = scanner.nextLine();
+      String command = input.nextLine();
       if (Pattern.matches("create event \\S+ from \\S+ to \\S+", command)) {
         this.createSingleEvent(command);
       } else if (Pattern.matches("create event \\S+ from \\S+ to \\S+ repeats \\S+ for \\d+ "
@@ -70,16 +93,6 @@ public class Controller implements IController {
     }
   }
 
-  @Override
-  public void goHeadlessCalendar(File commands) {
-    /*
-    To be implemented.
-    Will parse the given file similarily to the method above.
-    Most likely will pull above command design out into a helper method to be used for both the
-    headless and interactive methods.
-     */
-  }
-
   /**
    * Creates a single event.
    *
@@ -102,7 +115,7 @@ public class Controller implements IController {
   private void createEventSeriesTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
-      this.calendar.createEventSeriesStopDate(input[2], input[4], input[6], input[8],
+      this.calendar.createEventSeriesTimesRepeated(input[2], input[4], input[6], input[8],
               Integer.parseInt(input[10]));
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
@@ -237,7 +250,13 @@ public class Controller implements IController {
     String start = input[3];
     String end = input[5];
     StringBuilder builder = new StringBuilder();
+    ArrayList<IEvent> events = this.calendar.getEvents(start, end);
+    if (events.isEmpty()) {
+      builder.append("No events found");
+    }
     for (IEvent event : this.calendar.getEvents(start, end)) {
+      // get Events only gets events on the start date
+      //System.out.println("hit");
       builder.append("•");
       builder.append(event.toString());
       builder.append("\n");

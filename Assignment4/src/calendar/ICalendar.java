@@ -35,8 +35,8 @@ public interface ICalendar {
    * @throws IllegalArgumentException when input doesn't match specified pattern, endDateTtime is
    *                                  before startDateTtime
    */
-  void createEventSeriesStopDate(String subject, String startDateTtime, String endDateTtime,
-                                 String weekdays, int timesRepeated)
+  void createEventSeriesTimesRepeated(String subject, String startDateTtime, String endDateTtime,
+                                      String weekdays, int timesRepeated)
           throws IllegalArgumentException;
 
   /**
@@ -124,8 +124,8 @@ public interface ICalendar {
 
   /**
    * Updates the property of the event matching the given subject and dateTtime with the new
-   * property value. The properties of all events in the given series starting at or after the
-   * given dateTtime will be updated; otherwise, this method works the same as editEventProperty.
+   * property value. The properties of all events in the given series; otherwise, this method
+   * works the same as editEventProperty.
    *
    * @param prop         "subject", start", "end", "description", "location", or "status"
    * @param eventSubject String

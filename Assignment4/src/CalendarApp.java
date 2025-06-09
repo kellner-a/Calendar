@@ -29,7 +29,7 @@ public class CalendarApp {
       if (args.length != 4) {
         throw new IllegalArgumentException("Invalid number of arguments");
       }
-      controller.goHeadlessCalendar(new File(args[3]));
+      controller.goHeadlessCalendar(args[3]);
     }
   }
 }

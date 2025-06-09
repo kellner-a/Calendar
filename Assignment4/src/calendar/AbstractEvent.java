@@ -182,10 +182,30 @@ public abstract class AbstractEvent implements IEvent {
   public abstract boolean isSeries();
 
   @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof IEvent)) {
+      return false;
+    }
+    return this.subject.equals(((IEvent) obj).getSubject())
+            && this.startDate.compare(((IEvent) obj).getStartDate()) == 0
+            && this.endDate.compare(((IEvent) obj).getEndDate()) == 0
+            && this.getStartTime().equals(((IEvent) obj).getStartTime())
+            && this.getEndTime().equals(((IEvent) obj).getEndTime());
+  }
+
+  @Override
+  public int hashCode() {
+    return this.subject.hashCode() + this.getDateTtime(true).hashCode()
+            + this.getDateTtime(false).hashCode();
+  }
+
+  @Override
   public String toString() {
     String event =
-            this.subject + ": " + this.times[0] + ":" + this.times[1] +
-                    " - " + this.times[2] + ":" + this.times[3];
+            this.subject + ": " + String.format("%02d", this.times[0]) + ":" +
+                    String.format("%02d", this.times[1]) + " - "
+                    + String.format("%02d", this.times[2]) + ":"
+                    + String.format("%02d", this.times[3]);
     if (this.location.isEmpty()) {
       return event;
     }

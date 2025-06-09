@@ -70,6 +70,19 @@ public interface IEvent {
   boolean isSeries();
 
   /**
+   * Returns true if the given object is the same as this event. They are the same when the given
+   * object in an event with the same subject, startDateTtime, and EndDateTtime.
+   *
+   * @param obj Object
+   * @return true or false
+   */
+  @Override
+  boolean equals(Object obj);
+
+  @Override
+  int hashCode();
+
+  /**
    * Returns a string with this events subject, start and end time, and location (if any).
    *
    * @return String, "subject: startTime-endTime @ location"

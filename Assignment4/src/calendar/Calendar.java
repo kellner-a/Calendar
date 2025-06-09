@@ -41,18 +41,6 @@ public class Calendar implements ICalendar {
   }
 
   /**
-   * Throws an exception if time is formatted incorrectly.
-   *
-   * @param time String
-   * @throws IllegalArgumentException if not "h(h):m(m)"
-   */
-  private void validateTime(String time) throws IllegalArgumentException {
-    if (!Pattern.matches("^\\d\\d?:\\d\\d?$", time)) {
-      throw new IllegalArgumentException("Invalid time");
-    }
-  }
-
-  /**
    * Throws an exception if dateTtime is formatted incorrectly.
    *
    * @param dateTtime String
@@ -85,7 +73,7 @@ public class Calendar implements ICalendar {
    */
   private void validateProperty(String prop) throws IllegalArgumentException {
     if (!prop.equals("subject") && !prop.equals("start") && !prop.equals("end") && !prop.equals(
-            "description") && !prop.equals("locations") && !prop.equals("status")) {
+            "description") && !prop.equals("location") && !prop.equals("status")) {
       throw new IllegalArgumentException("Invalid property");
     }
   }
@@ -124,9 +112,9 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public void createEventSeriesStopDate(String subject, String startDateTtime,
-                                        String endDateTtime, String weekdays,
-                                        int timesRepeated)
+  public void createEventSeriesTimesRepeated(String subject, String startDateTtime,
+                                             String endDateTtime, String weekdays,
+                                             int timesRepeated)
           throws IllegalArgumentException {
     if (timesRepeated <= 0) {
       throw new IllegalArgumentException("Invalid times to repeat");
@@ -145,7 +133,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
-    validateTime(stopDate);
+    validateDate(stopDate);
     this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate));
   }
 
@@ -164,7 +152,7 @@ public class Calendar implements ICalendar {
       throw new IllegalArgumentException("Invalid times to repeat");
     }
     validateDate(startDate);
-    validateDate(weekdays);
+    validateWeekdays(weekdays);
     this.events.add(new SeriesEvent(subject, startDate, weekdays, timesRepeated));
   }
 
@@ -173,8 +161,8 @@ public class Calendar implements ICalendar {
                                               String stopDate)
           throws IllegalArgumentException {
     validateDate(startDate);
-    validateDate(weekdays);
-    validateTime(stopDate);
+    validateWeekdays(weekdays);
+    validateDate(stopDate);
     this.events.add(new SeriesEvent(subject, startDate, weekdays, stopDate));
   }
 
@@ -185,8 +173,11 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateProperty(prop);
-    IEvent eventToEdit = findEvent(eventSubject, startDateTtime, endDateTtime);
-    eventToEdit = eventToEdit.editEventProperty(prop, startDateTtime, newPropvalue);
+    IEvent event = findEvent(eventSubject, startDateTtime, endDateTtime);
+    IEvent edited = event.editEventProperty(prop, startDateTtime, newPropvalue);
+    if (!event.equals(edited)) {
+      this.events.add(edited);
+    }
   }
 
   @Override
@@ -194,8 +185,11 @@ public class Calendar implements ICalendar {
                                  String newPropvalue) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
     validateProperty(prop);
-    IEvent eventToEdit = findEvent(eventSubject, dateTtime, "");
-    eventToEdit = eventToEdit.editEventsProperty(prop, dateTtime, newPropvalue);
+    IEvent event = findEvent(eventSubject, dateTtime, "");
+    IEvent edited = event.editEventsProperty(prop, dateTtime, newPropvalue);
+    if (!event.equals(edited)) {
+      this.events.add(edited);
+    }
   }
 
   @Override
@@ -203,8 +197,11 @@ public class Calendar implements ICalendar {
                                  String newPropvalue) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
     validateProperty(prop);
-    IEvent eventToEdit = findEvent(eventSubject, dateTtime, "");
-    eventToEdit = eventToEdit.editSeriesProperty(prop, newPropvalue);
+    IEvent event = findEvent(eventSubject, dateTtime, "");
+    IEvent edited = event.editSeriesProperty(prop, newPropvalue);
+    if (!event.equals(edited)) {
+      this.events.add(edited);
+    }
   }
 
   @Override
@@ -212,9 +209,8 @@ public class Calendar implements ICalendar {
     validateDate(date);
     ArrayList<IEvent> events = new ArrayList<>();
     IDate day = new Date(date);
-    IEvent temp;
     for (IEvent event : this.events) {
-      temp = event.sameDay(day);
+      IEvent temp = event.sameDay(day);
       if (temp != null) {
         events.add(temp);
       }
@@ -228,10 +224,10 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     ArrayList<IEvent> events = new ArrayList<>();
-    String[] dateTime = startDateTtime.split("T");
-    IDate start = new Date(dateTime[0]);
-    dateTime = startDateTtime.split("T");
-    IDate end = new Date(dateTime[0]);
+    String[] startDateTime = startDateTtime.split("T");
+    IDate start = new Date(startDateTime[0]);
+    String[] endDateTime = endDateTtime.split("T");
+    IDate end = new Date(endDateTime[0]);
 
     IEvent temp;
     while (start.compare(end) <= 0) {
@@ -249,7 +245,6 @@ public class Calendar implements ICalendar {
   @Override
   public boolean showStatus(String dateTtime) throws IllegalArgumentException {
     validateDateTtime(dateTtime);
-    IEvent temp;
     for (IEvent event : this.events) {
       if (event.isBusy(dateTtime)) {
         return true;
