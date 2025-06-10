@@ -10,7 +10,8 @@ edit events subject Yoga from 2025-06-20T08:00 with HotYoga
 edit series location Dinner from 2025-06-11T19:00 with home
 
 print events on 2025-06-10
-print events from 2025-06-06T00:01 to 2025-07-10T23:59
+print events from 2025-06-10T00:01 to 2025-07-10T23:59
+print events from 2025-06-10T23:01 to 2025-07-10T23:59
 show status on 2025-06-10T18:30
 show status on 2025-06-09T11:00
 quit

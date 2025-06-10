@@ -223,21 +223,38 @@ public class Calendar implements ICalendar {
           throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
-    ArrayList<IEvent> events = new ArrayList<>();
     String[] startDateTime = startDateTtime.split("T");
     IDate start = new Date(startDateTime[0]);
+    int startTime = Integer.parseInt(startDateTime[1].replace(":", ""));
     String[] endDateTime = endDateTtime.split("T");
     IDate end = new Date(endDateTime[0]);
+    int endTime = Integer.parseInt(endDateTime[1].replace(":", ""));
 
     IEvent temp;
-    while (start.compare(end) <= 0) {
+    IDate tracker = new Date(startDateTime[0]);
+    ArrayList<IEvent> events = new ArrayList<>();
+    while (tracker.compare(end) <= 0) {
       for (IEvent event : this.events) {
-        temp = event.sameDay(start);
+        temp = event.sameDay(tracker);
         if (temp != null) {
-          events.add(temp);
+          if (tracker.compare(start) == 0) {
+            int tempStartTime = Integer.parseInt(temp.getStartTime().replace(":", ""));
+            int tempEndTime = Integer.parseInt(temp.getEndTime().replace(":", ""));
+            if (tempStartTime >= startTime || tempEndTime >= startTime) {
+              events.add(temp);
+            }
+          } else if (tracker.compare(end) == 0) {
+            int tempStartTime = Integer.parseInt(temp.getStartTime().replace(":", ""));
+            int tempEndTime = Integer.parseInt(temp.getEndTime().replace(":", ""));
+            if (tempStartTime <= endTime || tempEndTime <= endTime) {
+              events.add(temp);
+            }
+          } else {
+            events.add(temp);
+          }
         }
       }
-      start = start.getNextDate(1);
+      tracker = tracker.getNextDate(1);
     }
     return events;
   }
