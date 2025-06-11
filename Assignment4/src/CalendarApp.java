@@ -20,7 +20,7 @@ public class CalendarApp {
     if (args.length < 3) {
       throw new IllegalArgumentException("Invalid number of arguments");
     }
-    ICalendar calendar = new Calendar("2025-06-06");
+    ICalendar calendar = new Calendar();
     IView view = new TextView();
     IController controller = new Controller(calendar, view);
     if (args[2].equals("interactive")) {

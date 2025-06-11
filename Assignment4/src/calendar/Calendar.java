@@ -20,11 +20,9 @@ public class Calendar implements ICalendar {
    * Constructor for a calendar. Takes in a dateString as the current date and initializes its
    * list of events.
    *
-   * @param date "YYYY-M(M)-D(D)"
    * @throws IllegalArgumentException when date format isn't matched
    */
-  public Calendar(String date) throws IllegalArgumentException {
-    validateDate(date);
+  public Calendar() {
     this.events = new ArrayList<>();
   }
 
@@ -32,7 +30,7 @@ public class Calendar implements ICalendar {
    * Throws an exception if date is formatted incorrectly.
    *
    * @param date String
-   * @throws IllegalArgumentException if not "YYYY-M(M)-D(D)?"
+   * @throws IllegalArgumentException if not "YYYY-M(M)-D(D)"
    */
   private void validateDate(String date) throws IllegalArgumentException {
     if (!Pattern.matches("^\\d\\d\\d\\d-\\d\\d?-\\d\\d?$", date)) {
