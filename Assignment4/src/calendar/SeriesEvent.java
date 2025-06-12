@@ -166,6 +166,42 @@ public class SeriesEvent extends AbstractEvent {
   }
 
   @Override
+  public IEvent deepCopy(int timeAdjustment) {
+    SeriesEvent copy = new SeriesEvent(this.subject,
+            this.getStartDate() + "T" + this.getStartTime(),
+            this.getEndDate() + "T" + this.getEndTime(), this.weekdays,
+            this.timesRepeated, this.stopDate, this.location, this.description,
+            this.status, this.recurringDates);
+    if (timeAdjustment > 0) {
+      copy.times[0] += timeAdjustment;
+      copy.times[2] += timeAdjustment;
+      if (copy.times[0] > 23) {
+        copy.times[0] -= 23;
+        copy.startDate = copy.startDate.getNextDate(1);
+      } if (copy.times[2] > 23) {
+        copy.times[2] -= 23;
+        copy.endDate = copy.endDate.getNextDate(1);
+      }
+      return copy;
+    } else if (timeAdjustment < 0) {
+      copy.times[0] += timeAdjustment;
+      copy.times[2] += timeAdjustment;
+      /*
+      if (copy.times[0] < 0) {
+        copy.times[0] += 23;
+        copy.startDate = copy.startDate.getNextDate(-1);
+      } if (copy.times[2] < 0) {
+        copy.times[2] += 23;
+        copy.endDate = copy.endDate.getNextDate(-1);
+      }
+       */
+      return copy;
+    } else {
+      return copy;
+    }
+  }
+
+  @Override
   public IEvent sameDay(IDate date) {
     for (int i = 0; i < this.recurringDates.size(); i++) {
       if (this.recurringDates.get(i).compare(date) == 0) {
@@ -377,7 +413,6 @@ public class SeriesEvent extends AbstractEvent {
    *
    * @return String
    */
-
   public String recurringDatesAsString() {
     String result = "";
     for (int i = 0; i < this.recurringDates.size(); i++) {

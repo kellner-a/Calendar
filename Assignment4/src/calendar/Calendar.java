@@ -102,6 +102,20 @@ public class Calendar implements ICalendar {
   }
 
   @Override
+  public void addEvent(IEvent event) {
+    boolean add = true;
+    for (IEvent current : this.events) {
+      if (current.equals(event)) {
+        add = false;
+        break;
+      }
+    }
+    if (add) {
+      this.events.add(event);
+    }
+  }
+
+  @Override
   public void createSingleEvent(String subject, String startDateTtime, String endDateTtime)
           throws IllegalArgumentException {
     validateDateTtime(startDateTtime);

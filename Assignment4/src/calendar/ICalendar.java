@@ -13,6 +13,13 @@ import java.util.ArrayList;
 public interface ICalendar {
 
   /**
+   * Adds the given event to this calendar.
+   *
+   * @param event IEvent
+   */
+  void addEvent(IEvent event);
+
+  /**
    * Creates a single event in this calendar.
    *
    * @param subject        String

@@ -109,6 +109,9 @@ public abstract class AbstractEvent implements IEvent {
   }
 
   @Override
+  public abstract IEvent deepCopy(int timeAdjustment);
+
+  @Override
   public IEvent sameDay(IDate date) {
     if (this.startDate.compare(date) == 0) {
       return this.copy(this.subject, this.getDateTtime(true), this.getDateTtime(false),

@@ -8,6 +8,16 @@ package calendar;
 public interface IEvent {
 
   /**
+   * Returns a new copy of the given series event with the time adjustment. A postive time
+   * adjustment moves the time fowards that many hours. A negative time adjustment moves the time
+   * backwards that many hours.
+   *
+   * @param timeAdjustment integer
+   * @return IEvent
+   */
+  IEvent deepCopy(int timeAdjustment);
+
+  /**
    * Returns a copy of this event if this event is during the given date. Returns null otherwise.
    *
    * @param date Date

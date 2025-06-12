@@ -187,11 +187,11 @@ public class CalendarSuite implements ICalendarSuite {
 
     ArrayList<IEvent> events = source.getEvents(date);
 
-    if (sourceTZ.getDisplayName().equals(targetTZ.getDisplayName())) {
-      // copy events, no time change
+    // postive moves timezone forward
+    int timeDifference = (targetTZ.getRawOffset() - sourceTZ.getRawOffset()) / 3600000;
 
-    } else {
-      // copy events, time change
+    for (IEvent event : events) {
+      target.addEvent(event.deepCopy(timeDifference));
     }
 
   }
@@ -212,11 +212,11 @@ public class CalendarSuite implements ICalendarSuite {
 
     ArrayList<IEvent> events = source.getEvents(startDate + "T00:00", endDate + "T23:59");
 
-    if (sourceTZ.getDisplayName().equals(targetTZ.getDisplayName())) {
-      // copy events, no time change
-    } else {
-      // copy events, time change
-    }
+    // postive moves timezone forward
+    int timeDifference = (targetTZ.getRawOffset() - sourceTZ.getRawOffset()) / 3600000;
 
+    for (IEvent event : events) {
+      target.addEvent(event.deepCopy(timeDifference));
+    }
   }
 }

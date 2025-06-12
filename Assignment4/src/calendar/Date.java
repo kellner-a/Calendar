@@ -82,6 +82,9 @@ public class Date implements IDate {
 
   @Override
   public Date getNextDate(int days) {
+    if (days < 0) {
+      throw new IllegalArgumentException("Invalid days");
+    }
     int nextday = this.day;
     int nextmonth = this.month;
     int nextyear = this.year;
