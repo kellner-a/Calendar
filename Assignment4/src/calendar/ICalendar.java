@@ -175,7 +175,19 @@ public interface ICalendar {
    */
   boolean showStatus(String dateTtime) throws IllegalArgumentException;
 
+  /**
+   * Returns the list of events from this calendar.
+   * @return list of events
+   */
+
   public List<IEvent> getEvents();
+
+  /**
+   * Returns all events between two dates from the calendar formatted as a string.
+   * @param startDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime "YYYY-MM-DDThh:mm"
+   * @return string
+   */
 
   public String getEventsToString(String startDateTtime, String endDateTtime);
 }

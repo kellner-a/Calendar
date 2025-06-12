@@ -315,10 +315,12 @@ public class Calendar implements ICalendar {
     return false;
   }
 
+  @Override
   public List<IEvent> getEvents() {
     return this.events;
   }
 
+  @Override
   public String getEventsToString(String startDateTtime, String endDateTtime) {
     List<IEvent> list = this.getEvents(startDateTtime, endDateTtime);
     String result = "";

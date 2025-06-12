@@ -204,15 +204,12 @@ public abstract class AbstractEvent implements IEvent {
 
   @Override
   public String toString() {
-    String event = this.subject + ": " +  this.startDate.toString() + " ";
+    String event = this.subject + ": " + this.startDate.toString() + " ";
 
-    if(this.endDate.toString().isEmpty()) {
-      event += " " + this.endDate.toString();
-    }
-     event += String.format("%02d", this.times[0]) + ":" +
-                    String.format("%02d", this.times[1]) + " - "
-                    + String.format("%02d", this.times[2]) + ":"
-                    + String.format("%02d", this.times[3]);
+    event += String.format("%02d", this.times[0]) + ":" +
+            String.format("%02d", this.times[1]) + " - "
+            + String.format("%02d", this.times[2]) + ":"
+            + String.format("%02d", this.times[3]);
     if (this.location.isEmpty()) {
       return event;
     }
