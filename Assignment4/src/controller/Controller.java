@@ -101,9 +101,7 @@ public class Controller implements IController {
       } else if (command.equalsIgnoreCase("quit")) {
         break;
       } else {
-        if (!command.equalsIgnoreCase("")) {
-          System.out.println("Invalid command: " + command);
-        }
+        System.out.println("Invalid command: " + command);
       }
     }
   }
