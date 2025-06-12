@@ -1,7 +1,7 @@
 import java.io.File;
 
-import calendar.Calendar;
-import calendar.ICalendar;
+import calendar.CalendarSuite;
+import calendar.ICalendarSuite;
 import controller.Controller;
 import controller.IController;
 import view.IView;
@@ -20,9 +20,9 @@ public class CalendarApp {
     if (args.length < 3) {
       throw new IllegalArgumentException("Invalid number of arguments");
     }
-    ICalendar calendar = new Calendar();
+    ICalendarSuite suite = new CalendarSuite();
     IView view = new TextView();
-    IController controller = new Controller(calendar, view);
+    IController controller = new Controller(suite, view);
     if (args[2].equals("interactive")) {
       controller.goInteractiveCalendar();
     } else if (args[2].equals("headless")) {

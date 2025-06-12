@@ -104,11 +104,11 @@ public class CalendarSuite implements ICalendarSuite {
   }
 
   @Override
-  public ICalendar getCalendar(String name) throws IllegalArgumentException {
-    if (this.calendars.containsKey(name)) {
-      return this.calendars.get(name);
+  public ICalendar getCalendar() throws IllegalArgumentException {
+    if (!this.calendarInUse.isEmpty()) {
+      return this.calendars.get(this.calendarInUse);
     }
-    throw new IllegalArgumentException("No such calendar: " + name);
+    throw new IllegalArgumentException("No calendar in use");
   }
 
   @Override

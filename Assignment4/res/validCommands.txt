@@ -1,14 +1,14 @@
+create calendar --name MyCalendar --timezone America/New_York
+use calendar --name MyCalendar
 create event BirthdayParty from 2025-06-10T18:00 to 2025-06-10T23:00
 create event Yoga from 2025-06-10T08:00 to 2025-06-10T09:30 repeats MWF for 20 times
 create event Dinner from 2025-06-11T19:00 to 2025-06-11T21:00 repeats MTWRFSU until 2026-06-11
 create event HalfMarathon on 2025-06-08
 create event Healing on 2025-07-01 repeats MR for 10 times
 create event Hurting on 2025-07-01 repeats TWFSU until 2028-06-30
-
 edit event location BirthdayParty from 2025-06-10T18:00 to 2025-06-10T23:00 with SachemHouse
 edit events subject Yoga from 2025-06-20T08:00 with HotYoga
 edit series location Dinner from 2025-06-11T19:00 with home
-
 print events on 2025-06-10
 print events from 2025-06-10T00:01 to 2025-07-10T23:59
 print events from 2025-06-10T23:01 to 2025-07-10T23:59

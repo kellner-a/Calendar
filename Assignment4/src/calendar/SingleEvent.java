@@ -34,15 +34,13 @@ public class SingleEvent extends AbstractEvent {
     } else if (timeAdjustment < 0) {
       copy.times[0] += timeAdjustment;
       copy.times[2] += timeAdjustment;
-      /*
       if (copy.times[0] < 0) {
         copy.times[0] += 23;
-        copy.startDate = copy.startDate.getNextDate(-1);
+        // copy.startDate = copy.startDate.getNextDate(-1);
       } if (copy.times[2] < 0) {
         copy.times[2] += 23;
-        copy.endDate = copy.endDate.getNextDate(-1);
+        // copy.endDate = copy.endDate.getNextDate(-1);
       }
-       */
       return copy;
     } else {
       return copy;
