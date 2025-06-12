@@ -22,14 +22,12 @@ public interface ICalendarSuite {
   void createCalendar(String name, String timezone) throws IllegalArgumentException;
 
   /**
-   * Returns the calendar matching the given name, case-sensitive. Throws and error if no
-   * calendar with the given name exists.
+   * Returns the calendar currently in use. Throws and error if no calendar is in use.
    *
-   * @param name String
    * @return ICalendar
-   * @throws IllegalArgumentException when no calendar exists with given name
+   * @throws IllegalArgumentException when no calendar is in use
    */
-  ICalendar getCalendar(String name) throws IllegalArgumentException;
+  ICalendar getCalendar() throws IllegalArgumentException;
 
   /**
    * Returns a list of all current calendar names in this suite.

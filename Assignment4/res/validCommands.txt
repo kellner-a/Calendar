@@ -1,3 +1,5 @@
+create calendar --name MyCalendar --timezone America/New_York
+use calendar --name MyCalendar
 create event BirthdayParty from 2025-06-10T18:00 to 2025-06-10T23:00
 create event Yoga from 2025-06-10T08:00 to 2025-06-10T09:30 repeats MWF for 20 times
 create event Dinner from 2025-06-11T19:00 to 2025-06-11T21:00 repeats MTWRFSU until 2026-06-11
