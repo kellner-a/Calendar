@@ -82,7 +82,7 @@ public class SeriesEvent extends AbstractEvent {
     super(subject, startDate);
     this.weekdays = weekdays;
     this.timesRepeated = -1;
-    this.stopDate = new Date(startDate);
+    this.stopDate = new Date(stopDate);
     super.initializeOtherProperties();
     this.recurringDates();
   }

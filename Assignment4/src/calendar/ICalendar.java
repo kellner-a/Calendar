@@ -1,6 +1,7 @@
 package calendar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interface for all Calendars. All calendars can have single events and even series. This class
@@ -173,4 +174,8 @@ public interface ICalendar {
    * @throws IllegalArgumentException when input doesn't match specified pattern
    */
   boolean showStatus(String dateTtime) throws IllegalArgumentException;
+
+  public List<IEvent> getEvents();
+
+  public String getEventsToString(String startDateTtime, String endDateTtime);
 }

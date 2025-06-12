@@ -163,4 +163,6 @@ public interface IEvent {
    */
 
   String getEndTime();
+
+  String getDateTtime(boolean b);
 }
