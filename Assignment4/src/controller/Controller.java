@@ -49,13 +49,8 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Effectively executes the command, given it matches one of the valid commands. Returns true
-   * when the user wants to quit, returns false otherwise.
-   *
-   * @param input Scanner
-   */
-  private void commandPattern(Scanner input) {
+  @Override
+  public void commandPattern(Scanner input) {
     while (true) {
       String command = input.nextLine();
       if (Pattern.matches("create event \\S+ from \\S+ to \\S+", command)) {
@@ -89,16 +84,13 @@ public class Controller implements IController {
         break;
       } else {
         System.out.println("Invalid command");
+        throw new IllegalArgumentException("invalid command");
       }
     }
   }
 
-  /**
-   * Creates a single event.
-   *
-   * @param command String
-   */
-  private void createSingleEvent(String command) {
+  @Override
+  public void createSingleEvent(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.createSingleEvent(input[2], input[4], input[6]);
@@ -107,12 +99,8 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Creates an event series.
-   *
-   * @param command String
-   */
-  private void createEventSeriesTimesRepeated(String command) {
+  @Override
+  public void createEventSeriesTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.createEventSeriesTimesRepeated(input[2], input[4], input[6], input[8],
@@ -122,12 +110,8 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Creates an event series.
-   *
-   * @param command String
-   */
-  private void createEventSeriesStopDate(String command) {
+  @Override
+  public void createEventSeriesStopDate(String command) {
     String[] input = command.split(" ");
     try {
       this.calendar.createEventSeriesStopDate(input[2], input[4], input[6], input[8], input[10]);
@@ -136,11 +120,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Creates a single all day event.
-   *
-   * @param command String
-   */
+  @Override
   public void createSingleEventAllDay(String command) {
     String[] input = command.split(" ");
     try {
@@ -150,11 +130,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Creats an event series of all day events.
-   *
-   * @param command String
-   */
+  @Override
   public void createEventSeriesAllDayTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
@@ -165,11 +141,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Creates an event series of all day events.
-   *
-   * @param command String
-   */
+  @Override
   public void createEventSeriesAllDayStopDate(String command) {
     String[] input = command.split(" ");
     try {
@@ -179,11 +151,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Edits an events property.
-   *
-   * @param command String
-   */
+  @Override
   public void editEventProperty(String command) {
     String[] input = command.split(" ");
     try {
@@ -193,11 +161,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Edits an events property.
-   *
-   * @param command String
-   */
+  @Override
   public void editEventsProperty(String command) {
     String[] input = command.split(" ");
     try {
@@ -207,11 +171,7 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Edits an events property.
-   *
-   * @param command String
-   */
+  @Override
   public void editSeriesProperty(String command) {
     String[] input = command.split(" ");
     try {
@@ -221,13 +181,8 @@ public class Controller implements IController {
     }
   }
 
-  /**
-   * Returns a string listing events.
-   *
-   * @param command String
-   * @return String
-   */
-  private String printEventsDay(String command) {
+  @Override
+  public String printEventsDay(String command) {
     String[] input = command.split(" ");
     String date = input[3];
     StringBuilder builder = new StringBuilder();
@@ -239,13 +194,8 @@ public class Controller implements IController {
     return builder.toString();
   }
 
-  /**
-   * Returns a string listing events.
-   *
-   * @param command String
-   * @return String
-   */
-  private String printEventsRange(String command) {
+  @Override
+  public String printEventsRange(String command) {
     String[] input = command.split(" ");
     String start = input[3];
     String end = input[5];
@@ -264,13 +214,8 @@ public class Controller implements IController {
     return builder.toString();
   }
 
-  /**
-   * Returns the status of a certain time.
-   *
-   * @param command String
-   * @return String
-   */
-  private String showStatus(String command) {
+  @Override
+  public String showStatus(String command) {
     String[] input = command.split(" ");
     if (this.calendar.showStatus(input[3])) {
       return "busy";
