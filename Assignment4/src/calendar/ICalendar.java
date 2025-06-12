@@ -139,8 +139,7 @@ public interface ICalendar {
 
 
   /**
-   * Returns a list of events on the given day with their subject, start and end time, and
-   * location (if any).
+   * Returns a list of events on the given day.
    *
    * @param date "YYYY-MM-DD"
    * @return a list of events

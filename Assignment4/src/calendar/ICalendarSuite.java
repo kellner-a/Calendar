@@ -69,11 +69,25 @@ public interface ICalendarSuite {
    * @param startDateTtime     "YYYY-MM-DDThh:mm"
    * @param targetCalendarName String
    * @param newDateTtime       "YYYY-MM-DDThh:mm"
-   * @throws IllegalArgumentException when input isn't formatted, event doesn't exist, or
-   *                                  calendar doesn't exist
+   * @throws IllegalArgumentException when input isn't formatted, event doesn't exist, calendar
+   *                                  doesn't exist, or no calendar is marked as in use
    */
   void copySingleEvent(String eventName, String startDateTtime, String targetCalendarName,
                        String newDateTtime) throws IllegalArgumentException;
+
+  /**
+   * Copies all events on the given date from the calendar marked as in use to the target
+   * calendar on the targeted date. The times of the events are converted to match the the
+   * calendar they are being copied to.
+   *
+   * @param date               "YYYY-MM-DD"
+   * @param targetCalendarName String
+   * @param targetDate         "YYYY-MM-DD"
+   * @throws IllegalArgumentException when input isn't formatted, calendar doesn't exist, or no
+   *                                  calendar is marked as in use
+   */
+  void copyDayEvents(String date, String targetCalendarName, String targetDate)
+          throws IllegalArgumentException;
 
   /**
    * Copies all events within the range of the given startDate and endDate from the calendar
@@ -83,8 +97,8 @@ public interface ICalendarSuite {
    * @param endDate            "YYYY-MM-DD"
    * @param targetCalendarName String
    * @param targetStartDate    "YYYY-MM-DD"
-   * @throws IllegalArgumentException when input isn't formatted, event doesn't exist, or
-   *                                  calendar doesn't exist
+   * @throws IllegalArgumentException when input isn't formatted, calendar doesn't exist, or no
+   *                                  calendar is marked as in use
    */
   void copyEventsRange(String startDate, String endDate, String targetCalendarName,
                        String targetStartDate) throws IllegalArgumentException;

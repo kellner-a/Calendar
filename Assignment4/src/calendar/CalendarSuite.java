@@ -3,6 +3,7 @@ package calendar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 /**
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 public class CalendarSuite implements ICalendarSuite {
 
   private final Map<String, ICalendar> calendars;
-  private final Map<String, String> timezones;
+  private final Map<String, TimeZone> timezones;
   private String calendarInUse;
 
   public CalendarSuite() {
@@ -24,14 +25,15 @@ public class CalendarSuite implements ICalendarSuite {
   }
 
   /**
-   * Validates that the given timezone is a valid timezone. Throws an error if it's invalid.
-   * Valid timezones include: .
+   * Validates that the given timezone is formatted correctly. Throws an error if it's invalid.
    *
-   * @param timezone String
+   * @param timezone String - "place/place"
    * @throws IllegalArgumentException if not a valid timezone
    */
   private void validateTimezone(String timezone) throws IllegalArgumentException {
-
+    if (!Pattern.matches("^\\S+/\\S+", timezone)) {
+      throw new IllegalArgumentException("Invalid time zone");
+    }
   }
 
   /**
@@ -92,7 +94,13 @@ public class CalendarSuite implements ICalendarSuite {
       throw new IllegalArgumentException("Calendar with name " + name + " already exists");
     }
     this.calendars.put(name, new Calendar());
-    this.timezones.put(name, timezone);
+    TimeZone tz;
+    try {
+      tz = TimeZone.getTimeZone(timezone);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid time zone");
+    }
+    this.timezones.put(name, tz);
   }
 
   @Override
@@ -123,8 +131,15 @@ public class CalendarSuite implements ICalendarSuite {
       this.calendars.put(newPropValue, this.calendars.remove(name));
       this.timezones.put(newPropValue, this.timezones.remove(name));
     } else {
+      validateTimezone(newPropValue);
       this.timezones.remove(name);
-      this.timezones.put(name, newPropValue);
+      TimeZone tz;
+      try {
+        tz = TimeZone.getTimeZone(newPropValue);
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Invalid time zone");
+      }
+      this.timezones.put(name, tz);
     }
   }
 
@@ -142,6 +157,43 @@ public class CalendarSuite implements ICalendarSuite {
     validateDateTtime(startDateTtime);
     validateDateTtime(newDateTtime);
 
+    ArrayList<IEvent> events = this.calendars.get(calendarInUse).getEvents(startDateTtime,
+            startDateTtime);
+    IEvent toCopy = null;
+    for (IEvent event : events) {
+      if (event.getSubject().equals(eventName)) {
+        toCopy = event;
+      }
+    }
+    if (toCopy == null) {
+      throw new IllegalArgumentException("No such event: " + eventName);
+    }
+    ICalendar target = this.calendars.get(targetCalendarName);
+    target.createSingleEvent(toCopy.getSubject(), toCopy.getStartDate() + "T" + toCopy.getStartTime(),
+            toCopy.getEndDate() + "T" + toCopy.getEndTime());
+  }
+
+  @Override
+  public void copyDayEvents(String date, String targetCalendarName, String targetDate) throws IllegalArgumentException {
+    validateInUse();
+    validateCalendarName(targetCalendarName);
+    validateDate(date);
+    validateDate(targetDate);
+
+    ICalendar source = this.calendars.get(calendarInUse);
+    TimeZone sourceTZ = this.timezones.get(calendarInUse);
+    ICalendar target = this.calendars.get(targetCalendarName);
+    TimeZone targetTZ = this.timezones.get(targetCalendarName);
+
+    ArrayList<IEvent> events = source.getEvents(date);
+
+    if (sourceTZ.getDisplayName().equals(targetTZ.getDisplayName())) {
+      // copy events, no time change
+
+    } else {
+      // copy events, time change
+    }
+
   }
 
   @Override
@@ -152,6 +204,19 @@ public class CalendarSuite implements ICalendarSuite {
     validateDate(startDate);
     validateDate(endDate);
     validateDate(targetStartDate);
+
+    ICalendar source = this.calendars.get(calendarInUse);
+    TimeZone sourceTZ = this.timezones.get(calendarInUse);
+    ICalendar target = this.calendars.get(targetCalendarName);
+    TimeZone targetTZ = this.timezones.get(targetCalendarName);
+
+    ArrayList<IEvent> events = source.getEvents(startDate + "T00:00", endDate + "T23:59");
+
+    if (sourceTZ.getDisplayName().equals(targetTZ.getDisplayName())) {
+      // copy events, no time change
+    } else {
+      // copy events, time change
+    }
 
   }
 }
