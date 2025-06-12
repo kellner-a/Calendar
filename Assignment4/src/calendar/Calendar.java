@@ -51,6 +51,34 @@ public class Calendar implements ICalendar {
     }
   }
 
+  private void validateDates(String fromDateTtime, String toDateTtime) {
+    String[] fromString = fromDateTtime.split("T");
+    String[] toString = toDateTtime.split("T");
+    IDate fromDate = new Date(fromString[0]);
+    IDate toDate = new Date(toString[0]);
+
+    String[] fromTime = fromString[1].split(":");
+    String[] toTime = toString[1].split(":");
+    int fromHour = Integer.parseInt(fromTime[0]);
+    int fromMinute = Integer.parseInt(fromTime[1]);
+
+    int toHour = Integer.parseInt(toTime[0]);
+    int toMinute = Integer.parseInt(toTime[1]);
+
+    if (fromDate.compare(toDate) == 1) {
+      throw new IllegalArgumentException("the from date can not come after the to date");
+    }
+
+    if (fromHour > toHour) {
+      throw new IllegalArgumentException("the from date can not come after the to date");
+    }
+
+    if (fromDate.compare(toDate) == 0 && fromHour == toHour && fromMinute > toHour) {
+      throw new IllegalArgumentException("the from date can not come after the to date");
+    }
+
+  }
+
   /**
    * Throws an exception if weekdays is formatted incorrectly.
    *
@@ -106,6 +134,7 @@ public class Calendar implements ICalendar {
           throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
+    validateDates(startDateTtime, endDateTtime);
     this.events.add(new SingleEvent(subject, startDateTtime, endDateTtime));
   }
 
@@ -120,6 +149,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
+    validateDates(startDateTtime, endDateTtime);
     this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays,
             timesRepeated));
   }
@@ -132,6 +162,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
     validateDate(stopDate);
+    validateDates(startDateTtime, endDateTtime);
     this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate));
   }
 
@@ -171,6 +202,7 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateProperty(prop);
+    validateDates(startDateTtime, endDateTtime);
     IEvent event = findEvent(eventSubject, startDateTtime, endDateTtime);
     IEvent edited = event.editEventProperty(prop, startDateTtime, newPropvalue);
     if (!event.equals(edited)) {
@@ -221,6 +253,7 @@ public class Calendar implements ICalendar {
           throws IllegalArgumentException {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
+    validateDates(startDateTtime, endDateTtime);
     String[] startDateTime = startDateTtime.split("T");
     IDate start = new Date(startDateTime[0]);
     int startTime = Integer.parseInt(startDateTime[1].replace(":", ""));
@@ -266,5 +299,22 @@ public class Calendar implements ICalendar {
       }
     }
     return false;
+  }
+
+  public List<IEvent> getEvents() {
+    return this.events;
+  }
+
+  public String getEventsToString(String startDateTtime, String endDateTtime) {
+    List<IEvent> list = this.getEvents(startDateTtime, endDateTtime);
+    String result = "";
+    for (int i = 0; i < list.size(); i++) {
+      if (i == 0) {
+        result += list.get(i).toString();
+      } else {
+        result += " " + list.get(i).toString();
+      }
+    }
+    return result;
   }
 }
