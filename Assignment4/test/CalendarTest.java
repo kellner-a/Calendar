@@ -153,8 +153,8 @@ public class CalendarTest {
     }
   }
 
-  @Test
-  public void testNewCommands() {
-
-  }
+//  @Test
+//  public void testNewCommands() {
+//
+//  }
 }
