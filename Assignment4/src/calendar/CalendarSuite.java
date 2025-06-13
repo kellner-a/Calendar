@@ -159,6 +159,10 @@ public class CalendarSuite implements ICalendarSuite {
 
     ArrayList<IEvent> events = this.calendars.get(calendarInUse).getEvents(startDateTtime,
             startDateTtime);
+    int timeDifference =
+            (this.timezones.get(targetCalendarName).getRawOffset()
+                    - this.timezones.get(this.calendarInUse).getRawOffset()) / 3600000;
+
     IEvent toCopy = null;
     for (IEvent event : events) {
       if (event.getSubject().equals(eventName)) {
@@ -169,8 +173,7 @@ public class CalendarSuite implements ICalendarSuite {
       throw new IllegalArgumentException("No such event: " + eventName);
     }
     ICalendar target = this.calendars.get(targetCalendarName);
-    target.createSingleEvent(toCopy.getSubject(), toCopy.getStartDate() + "T" + toCopy.getStartTime(),
-            toCopy.getEndDate() + "T" + toCopy.getEndTime());
+    target.addEvent(toCopy.deepCopy(timeDifference));
   }
 
   @Override
