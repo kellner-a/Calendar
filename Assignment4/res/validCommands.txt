@@ -1,4 +1,5 @@
 create calendar --name MyCalendar --timezone America/New_York
+create calendar --name ParisCalendar --timezone Europe/Paris
 use calendar --name MyCalendar
 create event BirthdayParty from 2025-06-10T18:00 to 2025-06-10T23:00
 create event Yoga from 2025-06-10T08:00 to 2025-06-10T09:30 repeats MWF for 20 times
@@ -14,4 +15,8 @@ print events from 2025-06-10T00:01 to 2025-07-10T23:59
 print events from 2025-06-10T23:01 to 2025-07-10T23:59
 show status on 2025-06-10T18:30
 show status on 2025-06-09T11:00
+copy event HalfMarathon on 2025-06-08T09:00 --target ParisCalendar to 2025-06-08T14:00
+copy events on 2025-06-10 --target ParisCalendar to 2025-06-10
+use calendar --name ParisCalendar
+print events from 2025-06-08T00:01 to 2025-06-11T23:59
 quit
