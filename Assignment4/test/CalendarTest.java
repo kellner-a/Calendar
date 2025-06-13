@@ -1,16 +1,17 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import calendar.Calendar;
 import calendar.CalendarSuite;
-import calendar.ICalendar;
 import calendar.ICalendarSuite;
 import controller.Controller;
 import controller.IController;
 import view.IView;
 import view.TextView;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for the calendar class.
@@ -19,7 +20,6 @@ import static org.junit.Assert.*;
 public class CalendarTest {
   private ICalendarSuite testCalendarSuite;
   private IController testController;
-  private IView testView;
 
   @Before
   public void setUp() {
@@ -27,8 +27,8 @@ public class CalendarTest {
     this.testCalendarSuite.createCalendar("myCalendar", "America/New_York");
     this.testCalendarSuite.createCalendar("otherCalendar", "Europe/Paris");
     this.testCalendarSuite.useCalendar("myCalendar");
-    this.testView = new TextView();
-    this.testController = new Controller(this.testCalendarSuite, this.testView);
+    IView testView = new TextView();
+    this.testController = new Controller(this.testCalendarSuite, testView);
 
     // single event 6/12/25 9:50am -> 6/12/25 11:30am
     this.testCalendarSuite.getCalendar().createSingleEvent("Lecture", "2025-06-12T09:50",
@@ -67,8 +67,9 @@ public class CalendarTest {
             "2025-12-04T08:00",
             "coffeeshop");
 
-    assertEquals("coffeeshop", this.testCalendarSuite.getCalendar().getEvents().get(3).getLocation());
-//    assertEquals("coffee shop", this.testCalendar.getEvents().get(4).getLocation());
+    assertEquals("coffeeshop",
+            this.testCalendarSuite.getCalendar().getCalendarEvents().get(3).getLocation());
+    // assertEquals("coffee shop", this.testCalendar.getEvents().get(4).getLocation());
 
     // attempts to edit a property that doesn't exists
     try {
@@ -106,9 +107,10 @@ public class CalendarTest {
     setUp();
 
     assertEquals("Lecture: 2025-06-12 09:50 - 11:30 Exercise: 2025-06-23 07:00 - 09:00 " +
-            "Exercise: 2025-06-24 07:00 - 09:00 " +
-            "Exercise: 2025-06-25 07:00 - 09:00",
-            this.testCalendarSuite.getCalendar().getEventsToString("2025-06-12T09:50", "2025-06-25T09:00"));
+                    "Exercise: 2025-06-24 07:00 - 09:00 " +
+                    "Exercise: 2025-06-25 07:00 - 09:00",
+            this.testCalendarSuite.getCalendar().getEventsToString("2025-06-12T09:50",
+                    "2025-06-25T09:00"));
   }
 
   @Test
@@ -118,7 +120,8 @@ public class CalendarTest {
     this.testController.createSingleEvent(
             "create event dinner from 2025-06-12T20:00 to 2025-06-12T21:00");
 
-    assertEquals("dinner: 2025-06-12 20:00 - 21:00", this.testCalendarSuite.getCalendar().getEvents().get(6).toString());
+    assertEquals("dinner: 2025-06-12 20:00 - 21:00",
+            this.testCalendarSuite.getCalendar().getCalendarEvents().get(6).toString());
 
     assertEquals("busy",
             this.testController.showStatus("show status on 2025-12-04T8:00"));
@@ -126,7 +129,8 @@ public class CalendarTest {
     assertEquals("available",
             this.testController.showStatus("show status on 2025-01-04T8:00"));
 
-    assertEquals("•Meeting: 2025-12-04 08:00 - 17:00\n", this.testController.printEventsDay("print events on 2025-12-04"));
+    assertEquals("•Meeting: 2025-12-04 08:00 - 17:00\n",
+            this.testController.printEventsDay("print events on 2025-12-04"));
 
     assertEquals("•running: 2025-01-01 08:00 - 17:00\n" +
                     "•running: 2025-01-02 08:00 - 17:00\n" +
@@ -136,9 +140,10 @@ public class CalendarTest {
 
     // attempts to use a command with a from date that comes after the to date
     try {
-      this.testController.printEventsRange("print events from 2025-01-07T18:00 to 2025-01-01T01:00");
+      this.testController.printEventsRange(
+              "print events from 2025-01-07T18:00 to 2025-01-01T01:00");
       fail("the above shouldn't be allowed");
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       // a from date can not be a date that comes after a to date
     }
 
@@ -148,13 +153,9 @@ public class CalendarTest {
       this.testCalendarSuite.getCalendar().createEventSeriesTimesRepeated("breakfast",
               "2025-01-01T01:00", "2025-01-07T18:00", "FWM", 3);
       fail("there is an invalid weekdays string and an error should be thrown");
-    }catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       // the exception is caught
     }
   }
 
-//  @Test
-//  public void testNewCommands() {
-//
-//  }
 }

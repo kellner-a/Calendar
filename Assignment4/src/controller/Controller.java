@@ -217,8 +217,8 @@ public class Controller implements IController {
   public void createEventSeriesTimesRepeated(String command) {
     String[] input = command.split(" ");
     try {
-      this.suite.getCalendar().createEventSeriesTimesRepeated(input[2], input[4], input[6], input[8],
-              Integer.parseInt(input[10]));
+      this.suite.getCalendar().createEventSeriesTimesRepeated(input[2], input[4], input[6],
+              input[8], Integer.parseInt(input[10]));
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -233,7 +233,8 @@ public class Controller implements IController {
   public void createEventSeriesStopDate(String command) {
     String[] input = command.split(" ");
     try {
-      this.suite.getCalendar().createEventSeriesStopDate(input[2], input[4], input[6], input[8], input[10]);
+      this.suite.getCalendar().createEventSeriesStopDate(input[2], input[4], input[6], input[8],
+              input[10]);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -276,7 +277,8 @@ public class Controller implements IController {
   public void createEventSeriesAllDayStopDate(String command) {
     String[] input = command.split(" ");
     try {
-      this.suite.getCalendar().createAllDayEventSeriesStopDate(input[2], input[4], input[6], input[8]);
+      this.suite.getCalendar().createAllDayEventSeriesStopDate(input[2], input[4], input[6],
+              input[8]);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }

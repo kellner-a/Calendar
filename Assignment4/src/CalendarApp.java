@@ -1,5 +1,3 @@
-import java.io.File;
-
 import calendar.CalendarSuite;
 import calendar.ICalendarSuite;
 import controller.Controller;

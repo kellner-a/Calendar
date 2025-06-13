@@ -18,6 +18,10 @@ public class CalendarSuite implements ICalendarSuite {
   private final Map<String, TimeZone> timezones;
   private String calendarInUse;
 
+  /**
+   * Creates a CalendarSuite. Initializes the calendars and timezones to empty hashmaps and
+   * calendarInUse to an empty.
+   */
   public CalendarSuite() {
     calendars = new HashMap<>();
     timezones = new HashMap<>();
@@ -177,7 +181,8 @@ public class CalendarSuite implements ICalendarSuite {
   }
 
   @Override
-  public void copyDayEvents(String date, String targetCalendarName, String targetDate) throws IllegalArgumentException {
+  public void copyDayEvents(String date, String targetCalendarName, String targetDate)
+          throws IllegalArgumentException {
     validateInUse();
     validateCalendarName(targetCalendarName);
     validateDate(date);

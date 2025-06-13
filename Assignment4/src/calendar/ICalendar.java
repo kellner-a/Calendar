@@ -180,7 +180,7 @@ public interface ICalendar {
    * @return list of events
    */
 
-  public List<IEvent> getEvents();
+  List<IEvent> getCalendarEvents();
 
   /**
    * Returns all events between two dates from the calendar formatted as a string.
@@ -189,5 +189,5 @@ public interface ICalendar {
    * @return string
    */
 
-  public String getEventsToString(String startDateTtime, String endDateTtime);
+  String getEventsToString(String startDateTtime, String endDateTtime);
 }

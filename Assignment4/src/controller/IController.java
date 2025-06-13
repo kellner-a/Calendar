@@ -26,7 +26,7 @@ public interface IController {
    *
    * @param input Scanner
    */
-   void commandPattern(Scanner input);
+  void commandPattern(Scanner input);
 
   /**
    * Creates a single event.
@@ -48,7 +48,7 @@ public interface IController {
    *
    * @param command String
    */
-   void createEventSeriesStopDate(String command);
+  void createEventSeriesStopDate(String command);
 
   /**
    * Creates a single all day event.
@@ -62,35 +62,35 @@ public interface IController {
    *
    * @param command String
    */
-   void createEventSeriesAllDayTimesRepeated(String command);
+  void createEventSeriesAllDayTimesRepeated(String command);
 
   /**
    * Creates an event series of all day events.
    *
    * @param command String
    */
-   void createEventSeriesAllDayStopDate(String command);
+  void createEventSeriesAllDayStopDate(String command);
 
   /**
    * Edits an events property.
    *
    * @param command String
    */
-   void editEventProperty(String command);
+  void editEventProperty(String command);
 
   /**
    * Edits an events property.
    *
    * @param command String
    */
-   void editEventsProperty(String command);
+  void editEventsProperty(String command);
 
   /**
    * Edits an events property.
    *
    * @param command String
    */
-   void editSeriesProperty(String command);
+  void editSeriesProperty(String command);
 
   /**
    * Returns a string listing events.
@@ -98,7 +98,7 @@ public interface IController {
    * @param command String
    * @return String
    */
-   String printEventsDay(String command);
+  String printEventsDay(String command);
 
   /**
    * Returns a string listing events.
@@ -106,7 +106,7 @@ public interface IController {
    * @param command String
    * @return String
    */
-   String printEventsRange(String command);
+  String printEventsRange(String command);
 
   /**
    * Returns the status of a certain time.

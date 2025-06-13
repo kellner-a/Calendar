@@ -316,7 +316,7 @@ public class Calendar implements ICalendar {
   }
 
   @Override
-  public List<IEvent> getEvents() {
+  public List<IEvent> getCalendarEvents() {
     return this.events;
   }
 
