@@ -1,10 +1,12 @@
-1. Running the program on command line takes in 2-3 arguments (apart from the command to run the 
-   program). Example command line input, ./CalendarApp.java --mode interactive, ./CalendarApp.
-   java --mode headless <file-of-commands>. Though, headless mode is not available currently.
-2. All features of a Calendar work with the provided valid commands list. Headless mode, which 
-   takes in a file of input commands is not available. 
-3. Kenny worked on the SeriesEvent class and Date class and methods in AbstractEvent and testing.
-Alison worked on methods in the view and controller and Calendar.
-4. The calendar package is our model package. Getting events within a dateTtime range does not 
-   check time specifically and will return events on the dates irrespectable of the time. We ran 
-   out of time to test our calendar as throughly as we wanted, so our testing is lacking. :(
+1. We made a class above Calendar that has a hashmap of calendars and a hashmap of timezones. 
+We chose to approach it this way because all previous implementation continued to work with the new
+implementation. In other words it was  backwards compatible. Using the hashmaps also ensured that
+there couldn't be duplicate calendar names and reduces collisions. 
+2. Running the program on command line takes in 2-3 arguments(apart from the command line to run the program)
+Example command line input, java -jar Assignment4.jar ./CalendarApp.java --mode interactive
+ java -jar Assignment4.jar ./CalendarApp.java --mode headless <file-of-commands>
+3. All features work except for when copy events in different timezones results in the date going backwards.
+4. Kenny did testing and debugging and worked on methods in the CalendarSuite class.
+Alison worked on the CalendarSuite class and debugging.
+5. The feature regarding copy dates into different timezones doesn't work when the date has to go backwards.
+The features are functional, but they weren't thoroughly tested because we ran out of time.
