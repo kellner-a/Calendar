@@ -25,6 +25,7 @@ public class CalendarTest {
   public void setUp() {
     this.testCalendarSuite = new CalendarSuite();
     this.testCalendarSuite.createCalendar("myCalendar", "America/New_York");
+    this.testCalendarSuite.createCalendar("otherCalendar", "Europe/Paris");
     this.testCalendarSuite.useCalendar("myCalendar");
     this.testView = new TextView();
     this.testController = new Controller(this.testCalendarSuite, this.testView);
@@ -150,5 +151,10 @@ public class CalendarTest {
     }catch (IllegalArgumentException e) {
       // the exception is caught
     }
+  }
+
+  @Test
+  public void testNewCommands() {
+
   }
 }
