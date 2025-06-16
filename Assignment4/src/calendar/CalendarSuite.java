@@ -25,7 +25,8 @@ public class CalendarSuite implements ICalendarSuite {
   public CalendarSuite() {
     calendars = new HashMap<>();
     timezones = new HashMap<>();
-    calendarInUse = "";
+    this.createCalendar("Default", "America/New_York");
+    calendarInUse = "Default";
   }
 
   /**
@@ -111,6 +112,14 @@ public class CalendarSuite implements ICalendarSuite {
   public ICalendar getCalendar() throws IllegalArgumentException {
     if (!this.calendarInUse.isEmpty()) {
       return this.calendars.get(this.calendarInUse);
+    }
+    throw new IllegalArgumentException("No calendar in use");
+  }
+
+  @Override
+  public String getCalendarInUseName() throws IllegalArgumentException {
+    if (!this.calendarInUse.isEmpty()) {
+      return this.calendarInUse;
     }
     throw new IllegalArgumentException("No calendar in use");
   }

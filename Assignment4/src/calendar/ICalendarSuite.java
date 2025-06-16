@@ -30,6 +30,14 @@ public interface ICalendarSuite {
   ICalendar getCalendar() throws IllegalArgumentException;
 
   /**
+   * Returns the calendar currently marked in use's name.
+   *
+   * @return String
+   * @throws IllegalArgumentException when no calendar is in use
+   */
+  String getCalendarInUseName() throws IllegalArgumentException;
+
+  /**
    * Returns a list of all current calendar names in this suite.
    *
    * @return list of calendar names

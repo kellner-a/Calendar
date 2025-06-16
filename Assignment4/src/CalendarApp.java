@@ -4,6 +4,7 @@ import controller.Controller;
 import controller.IController;
 import view.IView;
 import view.TextView;
+import view.ScheduleView;
 
 /**
  * Class to run calendar from.
@@ -19,8 +20,12 @@ public class CalendarApp {
       throw new IllegalArgumentException("Invalid number of arguments");
     }
     ICalendarSuite suite = new CalendarSuite();
+    ScheduleView scheduleView = new ScheduleView(suite);
+    scheduleView.setVisible(true);
+
     IView view = new TextView();
     IController controller = new Controller(suite, view);
+    /*
     if (args[2].equals("interactive")) {
       controller.goInteractiveCalendar();
     } else if (args[2].equals("headless")) {
@@ -29,5 +34,7 @@ public class CalendarApp {
       }
       controller.goHeadlessCalendar(args[3]);
     }
+     */
+
   }
 }
