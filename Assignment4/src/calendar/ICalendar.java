@@ -177,6 +177,7 @@ public interface ICalendar {
 
   /**
    * Returns the list of events from this calendar.
+   *
    * @return list of events
    */
 
@@ -184,10 +185,27 @@ public interface ICalendar {
 
   /**
    * Returns all events between two dates from the calendar formatted as a string.
+   *
    * @param startDateTtime "YYYY-MM-DDThh:mm"
-   * @param endDateTtime "YYYY-MM-DDThh:mm"
+   * @param endDateTtime   "YYYY-MM-DDThh:mm"
    * @return string
    */
 
   String getEventsToString(String startDateTtime, String endDateTtime);
+
+  /**
+   * Finds the first 10 events from this calendar that occur on or after a given
+   * start date.
+   *
+   * @param startDateString a string that represents a date YYYY-MM-DD
+   * @return list of events
+   */
+
+  ArrayList<IEvent> getFirstTen(String startDateString);
+
+  /**
+   * Sorts the events in this calendar by their date.
+   */
+
+  void sortEvents();
 }

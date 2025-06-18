@@ -60,6 +60,7 @@ public class CalendarTest {
 
   @Test
   public void testEditProperties() {
+    this.setUp();
     // editing the location of all events with subject "Meeting" that come after 8/1/25 6am to
     // "coffee shop"
     this.testCalendarSuite.getCalendar().editEventsProperty("location",

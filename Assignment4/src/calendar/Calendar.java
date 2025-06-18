@@ -339,16 +339,12 @@ public class Calendar implements ICalendar {
     return result;
   }
 
-  /**
-   * Sorts the events in this calendar by their date.
-   */
-
   public void sortEvents() {
     for (int i = 1; i < this.events.size(); i++) {
       IEvent event = events.get(i);
       int j = i - 1;
 
-      while (j >= 0 && events.get(i).getDate().compare(event.getDate()) > 0) {
+      while (j >= 0 && events.get(j).getDate().compare(event.getDate()) > 0) {
         events.set(j + 1, events.get(j));
         j--;
       }
@@ -356,15 +352,12 @@ public class Calendar implements ICalendar {
     }
   }
 
-  /**
-   * Finds the first 10 events in this calendar that occur during or after a given start date.
-   * @param startDate the start date
-   * @return list of events up to 10 events
-   */
-
-  public ArrayList<IEvent> getFirstTen(IDate startDate) {
+  @Override
+  public ArrayList<IEvent> getFirstTen(String startDateString) {
     ArrayList<IEvent> result = new ArrayList<IEvent>();
 
+    validateDate(startDateString);
+    IDate startDate = new Date(startDateString);
     for(int i = 0; i < this.events.size(); i++) {
       if(result.size() == 10) {
         break;
