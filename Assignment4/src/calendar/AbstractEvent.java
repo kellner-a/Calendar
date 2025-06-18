@@ -258,4 +258,9 @@ public abstract class AbstractEvent implements IEvent {
             this.times[3]);
   }
 
+  @Override
+  public IDate getDate() {
+    return this.startDate;
+  }
+
 }

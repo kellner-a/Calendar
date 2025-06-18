@@ -65,7 +65,7 @@ public class ScheduleView extends JFrame implements ActionListener {
   I'm hoping that you can implement a decent bit of the GUI
   - Displaying the events on the calendar
   - Handling the display when a new start date is entered
-  - taking in the user's input for a new start date (however you want to do it)
+  - taking in the user's input for a new start date (howeveryou want to do it)
 
   ALISON:
   I'm hoping to

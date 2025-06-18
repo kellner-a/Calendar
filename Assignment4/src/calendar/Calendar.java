@@ -166,6 +166,7 @@ public class Calendar implements ICalendar {
     validateDates(startDateTtime, endDateTtime);
     this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays,
             timesRepeated));
+    this.sortEvents();
   }
 
   @Override
@@ -178,6 +179,7 @@ public class Calendar implements ICalendar {
     validateDate(stopDate);
     validateDates(startDateTtime, endDateTtime);
     this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate));
+    this.sortEvents();
   }
 
   @Override
@@ -185,6 +187,7 @@ public class Calendar implements ICalendar {
           throws IllegalArgumentException {
     validateDate(date);
     this.events.add(new SingleEvent(subject, date));
+    this.sortEvents();
   }
 
   @Override
@@ -197,6 +200,7 @@ public class Calendar implements ICalendar {
     validateDate(startDate);
     validateWeekdays(weekdays);
     this.events.add(new SeriesEvent(subject, startDate, weekdays, timesRepeated));
+    this.sortEvents();
   }
 
   @Override
@@ -207,6 +211,7 @@ public class Calendar implements ICalendar {
     validateWeekdays(weekdays);
     validateDate(stopDate);
     this.events.add(new SeriesEvent(subject, startDate, weekdays, stopDate));
+    this.sortEvents();
   }
 
   @Override
@@ -329,6 +334,45 @@ public class Calendar implements ICalendar {
         result += list.get(i).toString();
       } else {
         result += " " + list.get(i).toString();
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Sorts the events in this calendar by their date.
+   */
+
+  public void sortEvents() {
+    for (int i = 1; i < this.events.size(); i++) {
+      IEvent event = events.get(i);
+      int j = i - 1;
+
+      while (j >= 0 && events.get(i).getDate().compare(event.getDate()) > 0) {
+        events.set(j + 1, events.get(j));
+        j--;
+      }
+      events.set(j + 1, event);
+    }
+  }
+
+  /**
+   * Finds the first 10 events in this calendar that occur during or after a given start date.
+   * @param startDate the start date
+   * @return list of events up to 10 events
+   */
+
+  public ArrayList<IEvent> getFirstTen(IDate startDate) {
+    ArrayList<IEvent> result = new ArrayList<IEvent>();
+
+    for(int i = 0; i < this.events.size(); i++) {
+      if(result.size() == 10) {
+        break;
+      }
+      else {
+        if(this.events.get(i).getDate().compare(startDate) >= 0) {
+          result.add(events.get(i));
+        }
       }
     }
     return result;

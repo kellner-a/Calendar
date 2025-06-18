@@ -165,4 +165,11 @@ public interface IEvent {
   String getEndTime();
 
   String getDateTtime(boolean b);
+
+  /**
+   * Returns the start date of this event.
+   * @return date
+   */
+
+  IDate getDate();
 }
