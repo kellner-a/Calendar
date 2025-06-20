@@ -2,39 +2,40 @@ import calendar.CalendarSuite;
 import calendar.ICalendarSuite;
 import controller.Controller;
 import controller.IController;
+import controller.ISwingController;
+import controller.SwingController;
 import view.IView;
-import view.TextView;
 import view.ScheduleView;
+import view.TextView;
 
 /**
  * Class to run calendar from.
  */
 public class CalendarApp {
+
   /**
-   * Runs calendar from the terminal.
+   * Runs the calendar program.
    *
    * @param args String[] from terminal
    */
   public static void main(String[] args) {
-    if (args.length < 3) {
-      throw new IllegalArgumentException("Invalid number of arguments");
-    }
     ICalendarSuite suite = new CalendarSuite();
-    ScheduleView scheduleView = new ScheduleView(suite);
-    scheduleView.setVisible(true);
+    if (args.length == 0) {
+      ScheduleView scheduleView = new ScheduleView(suite);
+      ISwingController swingController = new SwingController(suite, scheduleView);
+      swingController.goDisplay();
+    } else {
+      IView view = new TextView();
+      IController controller = new Controller(suite, view);
 
-    IView view = new TextView();
-    IController controller = new Controller(suite, view);
-    /*
-    if (args[2].equals("interactive")) {
-      controller.goInteractiveCalendar();
-    } else if (args[2].equals("headless")) {
-      if (args.length != 4) {
-        throw new IllegalArgumentException("Invalid number of arguments");
+      if (args[1].equals("interactive")) {
+        controller.goInteractiveCalendar();
+      } else if (args[1].equals("headless")) {
+        if (args.length != 3) {
+          throw new IllegalArgumentException("Invalid number of arguments");
+        }
+        controller.goHeadlessCalendar(args[2]);
       }
-      controller.goHeadlessCalendar(args[3]);
     }
-     */
-
   }
 }

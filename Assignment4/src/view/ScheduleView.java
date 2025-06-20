@@ -1,127 +1,201 @@
 package view;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JToggleButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JFormattedTextField;
+import javax.swing.BoxLayout;
 
 import calendar.ICalendarSuite;
+import calendar.IEvent;
 
 /**
  * Represents the GUI for the Calendar. This ScheduleView allows a user to view the calendar
  * showing up to 10 events from a specific start date. The starting date can be updated by the
  * user to update their view.
  */
-public class ScheduleView extends JFrame implements ActionListener {
+public class ScheduleView extends JFrame implements ActionListener, ISwingView {
+
+  private final ICalendarSuite calendarSuite;
+
+  private JComboBox<String> startDay;
+  private JComboBox<String> startMonth;
+  private JComboBox<String> startYear;
+  private JButton changeStartDateButton;
 
   private JButton createEventButton;
-  private JButton createCalendarButton;
-  private JLabel display;
-  private JPanel mainPanel;
-  private JPanel topPanel;
-  private JPanel bottomPanel;
-  private JPanel leftPanel;
-  private JPanel rightPanel;
-  private JPanel centerPanel;
+  private JTextField eventName;
+  private JToggleButton eventAllDay;
+  private JTextField eventStartDate;
+  private JTextField eventEndDate;
+  private JTextField eventStartTime;
+  private JTextField eventEndTime;
+  private JLabel message;
 
-  /*
-  ALISON'S POTENTIAL IDEAS:
-  - we would disply the scheduled events in the center panel, and the right panel could hold the
-  button to create more events
-    - we only need to create single events with the GUI, so let's focus on that
-    - clicking on create event should create a pop-up window that the user can then input the
-    necessary information to create the event
-      - i'm thinking they can select a button or smth for an all day event, so they don't need to
-       input a start and end time
-  - we need a text field where the user can input the desired start date to view the schedule
-  (the user can see the next 10 events follow the given date)
-    - probably not a text box cause of input errors, but you get the idea
-  - make it look not terrible! (like everything is visible and makes sense without explanation)
+  private final JPanel leftPanel;
+  private final JPanel rightPanel;
+  private final JPanel centerPanel;
 
-  EXTRA CALENDARS: (we may not get to this and that's okay)
-  - we make the left panel display the calendars available
-  - the user could select them to make them in use
-
-  THINGS I DON'T WANT TO DO:
-  - we don't need to edit events, so don't worry about it
-  - creating series events is optional, so only if we're feeling fancy
-
-
-  HELPFUL JAVA SWING TUTS:
-  https://www.youtube.com/watch?v=Kmgo00avvEw
-  - i relied on this heavily in the fall and probably will again for this assignment
-  - it's got examples and visuals so just jump around the video to figure out how to make certain
-   components
-  The swingdemo folder
-  - contains the starter code they gave us to help with java swing
-  - helpful reference, but i like the youtube video more as it gives more explanation that just
-  showing code and having us interpret
-
-  Have questions? text me
-  Or, we can schedule a call for tuesday and crank out a portion of it
-
-  KENNY:
-  I'm hoping that you can implement a decent bit of the GUI
-  - Displaying the events on the calendar
-  - Handling the display when a new start date is entered
-  - taking in the user's input for a new start date (howeveryou want to do it)
-
-  ALISON:
-  I'm hoping to
-  - make pop up the window for creating events
-  - rig the controller with the new view
-  - potentially adding swtiching calendars and create calendar
+  /**
+   * Creates a schedule view for a calendar suite.
+   *
+   * @param calendar ICalendar
    */
-
   public ScheduleView(ICalendarSuite calendar) {
     super();
-    this.setTitle("CalendarApp");
-    this.setSize(500, 500);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLayout(new BorderLayout(2,2));
+    this.calendarSuite = calendar;
 
-    this.topPanel = new JPanel();
-    this.bottomPanel = new JPanel();
+    this.setTitle("CalendarApp");
+    this.setMinimumSize(new Dimension(800, 600));
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setLayout(new BorderLayout(2, 2));
+
     this.leftPanel = new JPanel();
     this.rightPanel = new JPanel();
     this.centerPanel = new JPanel();
 
-    this.topPanel.setBackground(Color.LIGHT_GRAY);
-    this.bottomPanel.setBackground(Color.LIGHT_GRAY);
+    this.leftPanel.setLayout(new FlowLayout());
+    this.rightPanel.setLayout(new FlowLayout());
+    this.centerPanel.setLayout(new BoxLayout(this.centerPanel, BoxLayout.Y_AXIS));
+
     this.leftPanel.setBackground(Color.LIGHT_GRAY);
     this.rightPanel.setBackground(Color.LIGHT_GRAY);
     this.centerPanel.setBackground(Color.WHITE);
 
-    this.topPanel.setPreferredSize(new Dimension(100,50));
-    this.bottomPanel.setPreferredSize(new Dimension(100,50));
-    this.leftPanel.setPreferredSize(new Dimension(100,50));
-    this.rightPanel.setPreferredSize(new Dimension(100,50));
-    this.centerPanel.setPreferredSize(new Dimension(100,50));
+    this.leftPanel.setPreferredSize(new Dimension(150, 50));
+    this.rightPanel.setPreferredSize(new Dimension(150, 50));
+    this.centerPanel.setPreferredSize(new Dimension(100, 50));
 
-    this.add(this.topPanel, BorderLayout.NORTH);
-    this.add(this.bottomPanel, BorderLayout.SOUTH);
     this.add(this.leftPanel, BorderLayout.WEST);
     this.add(this.rightPanel, BorderLayout.EAST);
     this.add(this.centerPanel, BorderLayout.CENTER);
 
-    this.topPanel.add(new JLabel(calendar.getCalendarInUseName()), BorderLayout.CENTER);
+    this.setUpRightPanel();
+    this.setUpLeftPanel();
+  }
 
-    for (String name: calendar.getCalendarNames()) {
-      this.leftPanel.add(new JButton(name), BorderLayout.NORTH);
+  private void setUpRightPanel() {
+    this.rightPanel.add(new JLabel("Current Calendar:"));
+    this.rightPanel.add(new JLabel("  " + this.calendarSuite.getCalendarInUseName() + "  "));
+
+    this.startDay = new JComboBox<>();
+    for (int i = 1; i <= 31; i++) {
+      this.startDay.addItem(i + "");
     }
-    this.createCalendarButton = new JButton("Create Calendar");
-    this.leftPanel.add(this.createCalendarButton, BorderLayout.SOUTH);
+    this.startDay.setSelectedIndex(0);
+    this.startMonth = new JComboBox<>();
+    for (int i = 1; i <= 12; i++) {
+      this.startMonth.addItem(i + "");
+    }
+    this.startMonth.setSelectedIndex(0);
+    this.startYear = new JComboBox<>();
+    for (int i = 2025; i <= 2050; i++) {
+      this.startYear.addItem(i + "");
+    }
+    this.startYear.setSelectedIndex(0);
+
+    JPanel yearPanel = new JPanel();
+    yearPanel.add(new JLabel("Year:"));
+    yearPanel.add(this.startYear);
+    JPanel monthPanel = new JPanel();
+    monthPanel.add(new JLabel("Month:"));
+    monthPanel.add(this.startMonth);
+    JPanel dayPanel = new JPanel();
+    dayPanel.add(new JLabel("Day:"));
+    dayPanel.add(this.startDay);
+
+    this.rightPanel.add(yearPanel);
+    this.rightPanel.add(monthPanel);
+    this.rightPanel.add(dayPanel);
+    this.changeStartDateButton = new JButton("Change Start Date");
+    this.changeStartDateButton.addActionListener(this);
+    this.rightPanel.add(this.changeStartDateButton);
+  }
+
+  private void setUpLeftPanel() {
+    this.leftPanel.add(new JLabel("Enter event name:"));
+    this.leftPanel.add(this.eventName = new JTextField("EventName"));
+    this.leftPanel.add(this.eventAllDay = new JToggleButton("All day event"));
+    this.leftPanel.add(new JLabel("Event start date and time:"));
+    this.leftPanel.add(this.eventStartDate = new JFormattedTextField("YYYY-MM-DD"));
+    this.leftPanel.add(this.eventStartTime = new JFormattedTextField("hh:mm"));
+    this.leftPanel.add(new JLabel("Event start date and time:"));
+    this.leftPanel.add(this.eventEndDate = new JFormattedTextField("YYYY-MM-DD"));
+    this.leftPanel.add(this.eventEndTime = new JFormattedTextField("hh:mm"));
 
     this.createEventButton = new JButton("Create Event");
-    this.rightPanel.add(this.createEventButton, BorderLayout.NORTH);
-
-    //this.mainPanel = new JPanel();
-    //this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.PAGE_AXIS));
+    this.createEventButton.addActionListener(this);
+    this.leftPanel.add(this.createEventButton);
+    this.leftPanel.add(this.message = new JLabel());
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    this.message.setText("");
+    if (e.getSource() == this.createEventButton) {
+      if (this.eventAllDay.isSelected()) {
+        try {
+          this.calendarSuite.getCalendar().createSingleAllDayEvent(this.eventName.getText(),
+                  this.eventStartDate.getText());
+        } catch (Exception ex) {
+          this.message.setText(ex.getMessage());
+        }
+      } else {
+        try {
+          this.calendarSuite.getCalendar().createSingleEvent(this.eventName.getText(),
+                  this.eventStartDate.getText() + "T" + this.eventStartTime.getText(),
+                  this.eventEndDate.getText() + "T" + this.eventEndTime.getText());
+        } catch (Exception ex) {
+          this.message.setText(ex.getMessage());
+        }
+      }
+      this.placeTen();
+    } else if (e.getSource() == this.changeStartDateButton) {
+      //pop up window
+      // or add text field to enter info
+      this.placeTen();
+      this.repaint();
+    } else if (e.getSource() == this.eventAllDay) {
+      if (this.eventAllDay.isSelected()) {
+        this.eventEndDate.setEnabled(false);
+        this.eventEndTime.setEnabled(false);
+        this.eventStartTime.setEnabled(false);
+      } else {
+        this.eventEndDate.setEnabled(true);
+        this.eventEndTime.setEnabled(true);
+        this.eventStartTime.setEnabled(true);
+      }
+    }
+    this.repaint();
+  }
 
+  private void placeTen() {
+    this.centerPanel.removeAll();
+    ArrayList<IEvent> events = this.calendarSuite.getCalendar().getFirstTen(
+            this.startYear.getSelectedItem().toString() + "-"
+                    + this.startMonth.getSelectedItem().toString() + "-"
+                    + this.startDay.getSelectedItem().toString());
+
+    for (IEvent event : events) {
+      this.centerPanel.add(new JLabel(event.toString()));
+    }
+    this.centerPanel.setVisible(true);
+  }
+
+  @Override
+  public void display() {
+    this.setVisible(true);
   }
 }

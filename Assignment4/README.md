@@ -1,12 +1,27 @@
-1. We made a class above Calendar that has a hashmap of calendars and a hashmap of timezones. 
-We chose to approach it this way because all previous implementation continued to work with the new
-implementation. In other words it was  backwards compatible. Using the hashmaps also ensured that
-there couldn't be duplicate calendar names and reduces collisions. 
-2. Running the program on command line takes in 2-3 arguments(apart from the command line to run the program)
-Example command line input, java -jar Assignment4.jar ./CalendarApp.java --mode interactive
- java -jar Assignment4.jar ./CalendarApp.java --mode headless <file-of-commands>
-3. All features work except for when copy events in different timezones results in the date going backwards.
-4. Kenny did testing and debugging and worked on methods in the CalendarSuite class.
-Alison worked on the CalendarSuite class and debugging.
-5. The feature regarding copy dates into different timezones doesn't work when the date has to go backwards.
-The features are functional, but they weren't thoroughly tested because we ran out of time.
+Changes in design of our program:
+1. addition of a Swing controller - to accomodate the swing view as it gets input form the view
+2. addition of a Swing view - to make the gui
+
+How to run the jar:
+- java -jar Assignment4.jar --mode headless path-of-script-file
+- java -jar Assignment4.jar --mode interactive
+- java -jar Assignment4.jar
+
+Features that work:
+- creating a single all day event (GUI)
+- creating a single event (GUI)
+- changing the start date for the schedule view (GUI)
+- creating multilpe calendars with varying timezones (non-GUI)
+- creating any type of event in a calendar (non-GUI)
+- editing events in a calendar (non-GUI)
+- copying events in a calendar (non-GUI)
+- chaning the timezone of a calendar (non-GUI)
+
+Distribution of work:
+- Alison made the ScheduleView and SwingController
+- Kenny made methods within the calendar class to help build the GUI
+
+Additional comments:
+- When working the GUI, it doesn't display right away every time. You may need to press the create 
+  event button twice for the events to display, and the change start date button has a similar 
+  issue.

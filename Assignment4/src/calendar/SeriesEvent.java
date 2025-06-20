@@ -178,7 +178,8 @@ public class SeriesEvent extends AbstractEvent {
       if (copy.times[0] > 23) {
         copy.times[0] -= 23;
         copy.startDate = copy.startDate.getNextDate(1);
-      } if (copy.times[2] > 23) {
+      }
+      if (copy.times[2] > 23) {
         copy.times[2] -= 23;
         copy.endDate = copy.endDate.getNextDate(1);
       }
@@ -189,7 +190,8 @@ public class SeriesEvent extends AbstractEvent {
       if (copy.times[0] < 0) {
         copy.times[0] += 23;
         // copy.startDate = copy.startDate.getNextDate(-1);
-      } if (copy.times[2] < 0) {
+      }
+      if (copy.times[2] < 0) {
         copy.times[2] += 23;
         // copy.endDate = copy.endDate.getNextDate(-1);
       }

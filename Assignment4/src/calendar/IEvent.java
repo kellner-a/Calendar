@@ -168,6 +168,7 @@ public interface IEvent {
 
   /**
    * Returns the start date of this event.
+   *
    * @return date
    */
 

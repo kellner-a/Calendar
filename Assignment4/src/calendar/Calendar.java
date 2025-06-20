@@ -47,7 +47,7 @@ public class Calendar implements ICalendar {
   private void validateDateTtime(String dateTtime) throws IllegalArgumentException {
     if (!Pattern.matches("^\\d\\d\\d\\d-\\d\\d?-\\d\\d?T\\d\\d?:\\d\\d?$", dateTtime)
             || dateTtime.isEmpty()) {
-      throw new IllegalArgumentException("Invalid dateTtime");
+      throw new IllegalArgumentException("Invalid dateTtime: " + dateTtime);
     }
   }
 
@@ -105,6 +105,18 @@ public class Calendar implements ICalendar {
   }
 
   /**
+   * Throws an error if the event already exists.
+   *
+   * @param event IEvent
+   * @throws IllegalArgumentException when the event already exists
+   */
+  private void validateEvent(IEvent event) throws IllegalArgumentException {
+    if (this.events.contains(event)) {
+      throw new IllegalArgumentException("event already exists");
+    }
+  }
+
+  /**
    * Returns the event matching the subject, startDateTtime, and endDateTtime. Throws an error if
    * no such event exists.
    *
@@ -149,7 +161,9 @@ public class Calendar implements ICalendar {
     validateDateTtime(startDateTtime);
     validateDateTtime(endDateTtime);
     validateDates(startDateTtime, endDateTtime);
-    this.events.add(new SingleEvent(subject, startDateTtime, endDateTtime));
+    IEvent temp = new SingleEvent(subject, startDateTtime, endDateTtime);
+    validateEvent(temp);
+    this.events.add(temp);
   }
 
   @Override
@@ -164,8 +178,10 @@ public class Calendar implements ICalendar {
     validateDateTtime(endDateTtime);
     validateWeekdays(weekdays);
     validateDates(startDateTtime, endDateTtime);
-    this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays,
-            timesRepeated));
+    IEvent temp = new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays,
+            timesRepeated);
+    validateEvent(temp);
+    this.events.add(temp);
     this.sortEvents();
   }
 
@@ -178,7 +194,9 @@ public class Calendar implements ICalendar {
     validateWeekdays(weekdays);
     validateDate(stopDate);
     validateDates(startDateTtime, endDateTtime);
-    this.events.add(new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate));
+    IEvent temp = new SeriesEvent(subject, startDateTtime, endDateTtime, weekdays, stopDate);
+    validateEvent(temp);
+    this.events.add(temp);
     this.sortEvents();
   }
 
@@ -186,7 +204,9 @@ public class Calendar implements ICalendar {
   public void createSingleAllDayEvent(String subject, String date)
           throws IllegalArgumentException {
     validateDate(date);
-    this.events.add(new SingleEvent(subject, date));
+    IEvent temp = new SingleEvent(subject, date);
+    validateEvent(temp);
+    this.events.add(temp);
     this.sortEvents();
   }
 
@@ -199,7 +219,9 @@ public class Calendar implements ICalendar {
     }
     validateDate(startDate);
     validateWeekdays(weekdays);
-    this.events.add(new SeriesEvent(subject, startDate, weekdays, timesRepeated));
+    IEvent temp = new SeriesEvent(subject, startDate, weekdays, timesRepeated);
+    validateEvent(temp);
+    this.events.add(temp);
     this.sortEvents();
   }
 
@@ -210,7 +232,9 @@ public class Calendar implements ICalendar {
     validateDate(startDate);
     validateWeekdays(weekdays);
     validateDate(stopDate);
-    this.events.add(new SeriesEvent(subject, startDate, weekdays, stopDate));
+    IEvent temp = new SeriesEvent(subject, startDate, weekdays, stopDate);
+    validateEvent(temp);
+    this.events.add(temp);
     this.sortEvents();
   }
 
@@ -339,6 +363,9 @@ public class Calendar implements ICalendar {
     return result;
   }
 
+  /**
+   * Sorts this calendar's events chronologically.
+   */
   public void sortEvents() {
     for (int i = 1; i < this.events.size(); i++) {
       IEvent event = events.get(i);
@@ -358,12 +385,11 @@ public class Calendar implements ICalendar {
 
     validateDate(startDateString);
     IDate startDate = new Date(startDateString);
-    for(int i = 0; i < this.events.size(); i++) {
-      if(result.size() == 10) {
+    for (int i = 0; i < this.events.size(); i++) {
+      if (result.size() == 10) {
         break;
-      }
-      else {
-        if(this.events.get(i).getDate().compare(startDate) >= 0) {
+      } else {
+        if (this.events.get(i).getDate().compare(startDate) >= 0) {
           result.add(events.get(i));
         }
       }

@@ -1,0 +1,14 @@
+making a single all day event:
+- input event name and start date, following the format in the text fields
+- toggle the all day event button on
+- press create event
+
+making a single day event:
+- input event name, start date, start time, end date, end time
+    - following the format in the text fields
+- toggle the all day event button off if on
+- press create event
+
+changing schedule start date:
+- select date from the drop downs
+- press change start date
